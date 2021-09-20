@@ -4,6 +4,6 @@ let merge        = require( 'deepmerge' );
 let wdioMainConf = require( './wdio.main.conf.js' );
 
 exports.config = merge( wdioMainConf.config, {
-    baseUrl                   : 'http://opensquare.nyupress.org/',
+    baseUrl                   : 'https://opensquare.nyupress.org/',
     openSquareGoogleAnalytics : true,
 } );
