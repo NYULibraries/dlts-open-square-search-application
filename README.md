@@ -3,32 +3,106 @@
 [Metadata search](http://opensquare.nyupress.org/search/)
 for the DLTS [Open Square website](http://opensquare.nyupress.org/).
 
+Built With:
+* [Vite]
+* [ESLint](https://eslint.org/)
+* [Prettier](https://prettier.io/)
+* [React.js]
+
+Tested with:
+* [Selenium](https://www.seleniumhq.org/)
+* [WebdriverIO](https://webdriver.io/)
+
+## Architecture
++------------------+
+| Publication Services from LIbraries
++------------------+
+    |
+    V
++------------------+
+| Metadata Repository in Github
++------------------+
+    |
+    V
++------------------+
+| Alberto's API
++------------------+
+    | used to build OpenSquare Hugo
+    V
++------------------+
+| Open Square Hugo
+| browse page
+| individual books with
+| details and links to e-readers
++------------------+
+    |   ^
+    V   |
++------------------+
+| *** This application ***
+| OpenSquare Search React
+| renders a list
+| individual items link to static open square hugo pages
++------------------+
+    |   ^
+    V   |
++------------------+
+| Solr OpenSquare
+| uses metadata repository for schema and data shape
++------------------+
+
+### Environments
+
+Use this API endpoint for search results:
+- https://discovery1.dlib.nyu.edu/solr/open-square-metadata/select?q=*:*
+  - `main` -> discovery1
+    - only create PRs from `staging` branch as promotion of changes
+  - `staging` ->
+    - only create PRs from `development` branch as promotion of changes
+  - `development` ->
+    - make development default branch
+    - branch out of development
+    - create PR into development
+
+- sites.dlib.nyu.edu/viewer/api/v1/search
+
 ## Project setup
 
 ### Prerequisites
 
-* [Node](https://nodejs.org/) (at least Node 10.x recommended)
+- git
+- [nvm](https://github.com/nvm-sh/nvm) latest
+  - nodejs stated in `.nvmrc`
+    - npm
+- vscode
+    - `EditorConfig.EditorConfig` handles indentation, whitespace, and line endings
+    - `dbaeumer.vscode-eslint` uses ESLint recommendations
+    - `esbenp.prettier-vscode` autoformat on save
 * [Java](https://www.java.com/) (at least Java 8 recommended) - for Selenium tests
 * [rsync](https://rsync.samba.org/) - for deployment scripts
-* [yarn](https://yarnpkg.com/) is recommended, but not required.  All instructions
-below assume `yarn`.
+- ask for environment variables to someone from the team
+    - `cp .env.example .env.local`
+    - ask the team for new values for this project
 
 ### Installing dependencies
 
 ```
-# Install dependencies including devDependencies
-# If NODE_ENV is not set to production, can leave out --production=false
-yarn install --production=false
+# use `main` branch
+npm clean-install
 ```
 
 ### Compile and hot-reload for development
+
 ```
 # Serve development version with hot reload at localhost:8080
 # Uses environment variables from .env.development
-yarn serve
+npm run dev
 ```
 
 ### Compile and minify for development, stage, and production
+```
+npm run build
+```
+
 ```
 # Uses environment variables from .env.dev
 yarn build:dev
@@ -41,6 +115,11 @@ yarn build:prod
 ```
 
 ### Run all tests
+
+> project has been updated to use react instead of vue.js and changes to the markup have happened.
+> these tests might not work entirely as they used to.
+> keeping for reference.
+
 ```
 # Run all unit and browser tests
 yarn test
@@ -76,20 +155,15 @@ yarn test:unit
 ```
 
 ### Lint and fix files
-```
-yarn lint
-```
 
-### Lint but do not fix files
-```
-yarn lint --no-fix
-```
+- vscode + `EditorConfig.EditorConfig` extension handles indentation, whitespace, and line endings
+- vscode + `dbaeumer.vscode-eslint` uses ESLint recommendations
+- prettier on save through project vscode setting
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/) and
-[Environment Variables and Modes](https://cli.vuejs.org/guide/mode-and-env.html).
+`npm run lint`
 
 ### Notes on tests
+
 
 #### Solr fake
 
@@ -170,7 +244,7 @@ from the Solr fake fixture files in `tests/browser/fixtures/solr-fake/`.  The fi
 were generated from the live Solr indexes which themselves were programmatically
 verified against the metadata files in
 [NYULibraries/dlts-epub-metadata](https://github.com/NYULibraries).
- 
+
 In the future, if the fixture data for the Solr fake changes, the golden files
 can be updated by running `yarn test:browser:update:golden`.
 
@@ -197,22 +271,22 @@ server instead of the production Solr server.
   * Simulates Solr request error for initial topic/full-text search
 
 ## Deployment
-```
-# Build dev server version, copy to server, and run tests
-yarn deploy:dev
 
-# Build stage server version, copy to server, and run tests
-yarn deploy:stage
+- `npm run build`
+- [ ] TODO: add script for S3 bucket push
+- [ ] TODO: add pipeline for CICD in github
+- [ ] TODO: configure static file server to redirect 404s to `index.html`
+- [ ] TODO: configure aws cloudfront > cloudfront distributions > error pages > `index.html`
+- [ ] TODO: how does opensquare handle 404?
 
-# Build prod server version, copy to server, and run tests
-yarn deploy:prod
-```
+> TODO: change deployment through npm
 
+> TODO: move deployment to pipeline
 A deploy task does the following:
 
 1) Builds the specified version of the search application
 2) Copies it to the appropriate server
-3) Runs tests against the newly deployed application 
+3) Runs tests against the newly deployed application
 
 Note that the scripts assume "devweb1", "stageweb1", and "web1" in ~/.ssh/config.
 This is necessary to get the username, which can't be hardcoded in the repo.
@@ -230,16 +304,11 @@ Host devdb1
      User     [USERNAME]
 ```
 
-## Built With
+## Contributing
 
-* [Babel](https://babeljs.io/)
-* [ESLint](https://eslint.org/)
-* [Jest](https://jestjs.io/)
-* [Selenium](https://www.seleniumhq.org/)
-* [Solr](http://lucene.apache.org/solr/)
-* [Vue.js](https://vuejs.org/)
-* [Vue CLI 3](https://cli.vuejs.org/)
-* [Vue Test Utils](https://vue-test-utils.vuejs.org/)
-* [Vuex](https://vuex.vuejs.org/)
-* [WebdriverIO](https://webdriver.io/)
-* [Webpack](https://webpack.js.org/e0b5805d423a4ec9473ee315250968b2.svg)
+- clone repo
+- create new branch from `main` with naming style of `<fix/feature/docs/refactor>/jiraTicket/smallDescription`
+- push up temporary work and create Draft Pull Request as soon as possible
+- continue work and push frequently, commit atomically
+- PR to lower staging, move changes up the chain as they are tested and evaluated
+
