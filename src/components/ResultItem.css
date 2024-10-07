@@ -1,0 +1,16 @@
+.book-summary-hold {
+    color: red;
+}
+
+.container {
+    display: flex;
+    border: 1px solid blue;
+}
+
+.thumbnail-item {
+    flex-grow: 2
+}
+
+.meta-item {
+    flex-grow: 4
+}
