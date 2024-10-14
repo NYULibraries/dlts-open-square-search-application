@@ -47,10 +47,15 @@ export function ResultItem({
                             <div className="book-subtitle">{subtitle}</div>
                         </a>
                     </div>
-                    {/* <div className="author">{author}</div> */}
-                    <div className="author">
-                        {unflattenContributors(contributors)}
-                    </div>
+                    {/* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/forEach */}
+                    {unflattenContributors(contributors).forEach(
+                        (contributorInRoleSentece, roleName) => {
+                            <div className="author-group">
+                                <span className="rolename">{{ roleName }}</span>
+                                contributorsInRoleSentence
+                            </div>;
+                        }
+                    )}
                     <div className="pubdate">
                         <span>Published: </span>
                         <span>{date}</span>
