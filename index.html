@@ -1,27 +1,19 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://opensquare.nyupress.org/css/style.css">
 
-<head>
-    <% if ( process.env.VUE_APP_GOOGLE_ANALYTICS_TRACKING_ID ) { %>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=<%= process.env.VUE_APP_GOOGLE_ANALYTICS_TRACKING_ID %>"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', '<%= process.env.VUE_APP_GOOGLE_ANALYTICS_TRACKING_ID %>', { 'anonymize_ip': true });
-    </script>
-    <% } %>
-    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="icon" type="image/png" href="images/favicon.ico">
     <title>Search: Open Square: NYU Press </title>
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,500,600,700,900" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
-</head>
+    <link rel="stylesheet" href="https://opensquare.nyupress.org/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 
+  </head>
 <body class="search-page">
     <div class="hold-all">
         <header class="page-header">
@@ -50,11 +42,11 @@
             <main id="main-content">
                 <h1 class="page-title sr-only">Search for Open Access Books from NYU Press</h1>
                 <div id="app"></div>
-                <!-- built files will be auto injected -->
+                <script type="module" src="/src/main.jsx"></script>
             </main>
         </div>
         <footer class="page-footer">
-            <nav class="nav-links">
+                <nav class="nav-links">
                 <ul>
                     <li><a href="/books">Browse Books</a></li>
 
@@ -70,5 +62,4 @@
         </footer>
     </div>
 </body>
-
 </html>

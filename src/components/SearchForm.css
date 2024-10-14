@@ -1,0 +1,61 @@
+button {
+    border: 1px solid transparent
+}
+
+.container {
+    display: flex
+}
+
+#search-input {
+    flex: 1 1 auto;
+    padding: 2px 1rem;
+    border: 1px solid transparent
+}
+
+.container button {
+    border: 1px solid transparent
+}
+
+form {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16);
+}
+
+.osq-resultsheader {
+    font-size: 1.7rem;
+    margin-bottom: 2rem;
+    font-weight: 500;
+}
+
+#osq-search>* {
+    height: 45px;
+    border: 1px solid transparent;
+    font-size: 1rem;
+}
+
+#osq-search [type=submit] {
+    background-color: #fff;
+    flex: 0 1 70px;
+}
+
+
+#osq-search [type=submit]:hover {
+    cursor: pointer;
+    background-color: #000;
+}
+
+#osq-search [type=submit] svg {
+    width: auto;
+    height: 97%;
+}
+#osq-search [type=submit] svg:hover {
+    color: #fff;
+}
+
+svg:not([fill]) {
+    fill: currentColor;
+}
+
+svg:not(:root) {
+    overflow-clip-margin: content-box;
+    overflow: hidden;
+}
