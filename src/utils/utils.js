@@ -20,10 +20,11 @@ export function truncate(text, maxLength) {
 /**
  * function that retrieves a summary of description that Solr returns
  * in the form of highlights. Checks if Solr provided highlights and returns them.
- * @param {String} result the whole data of each publication
- * @returns String
+ * @param {string} result - the whole data of each publication
+ * @param {number} maxDescriptionLength - how long we want the truncated description to be
+ * @returns {string}
  */
-export function getDescription(result) {
+export function getDescription(result, maxDescriptionLength = 500) {
     const identifier = result.identifier;
     // how can get scope access to highlights in this function as a util
     if (
@@ -46,9 +47,10 @@ export function getDescription(result) {
 }
 
 /**
- * isbn: String
- * TODO: verify if we want this value to be an environment variable
  * builds the URL for thumbnails in the ResultItem
+ * @param {string} isbn - id of the book
+ * @returns {string} url with isbn interpolated
+ * TODO: verify if we want this value to be an environment variable
  */
 export function getThumbnailUrl(isbn) {
     return `https://nyu-opensquare-us.imgix.net/covers/${isbn}.jpg?auto=format&w=145`;
@@ -84,38 +86,44 @@ export function getFieldValueOrHighlightedFieldValue(
 
 /**
  * creates the query used in the solr call for search
- * TODO: add proper args
- * @param {*} args
+ * @param {string} query - query entered by the user
  */
-export function solrQueryFactory(args) {
+export function solrQueryFactory(query) {
     // TODO: look into the `main.js` file for the dlts-opensquare-search-application
-    return "some string for query";
+    const tempURL = `${import.meta.env.VITE_API_TO_SOLR_PROTOCOL}://${
+        import.meta.env.VITE_API_TO_SOLR_HOST
+    }`;
+
+    return tempURL + `&query=*${query}*`;
 }
 
 /**
  * function that takes a flat contributors list and returns it
- * ordered and in an easy way to render as a Map for react
+ * ordered and in an easy way to render as an Array for react to map over.
  * matching Hugo logic for naming here:
  * https://github.com/NYULibraries/dlts-open-square/commit/601e7987c2440e182c747c294fe8a924341fe923#diff-13693fcffa921ef48b3fadcc2c6983d0820d73e7e989a48d97584e7e4904ccbcR4
  * @param {String} contribs - flattened JSON array of contributors in individual objects
- * @returns {Map<string,string>} Contributors in the form a Map. Key = role, Value = Legible people in said role
+ * @returns {string[]} array of sentences where each contributor is aligned by type and by order
  */
-export function unflattenContributors(contribs) {
+export function sortContributorsIntoRoleBuckets(contribs) {
+    // export function unflattenContributors(contribs) {
     // 1. transform contributors from flat string to JSON object
-    let rehydratedContribs = JSON.parse(contribs);
+    // no more need to rehydrate contributors when using Alberto's API
+    // let rehydratedContribs = JSON.parse(contribs);
 
     // 1. sort the contributors by their `.order` key
     // O(n)
-    rehydratedContribs.sort((a, b) => {
-        // neg for a before b, positive for b before a, zero or nan a = b
-        return a.order - b.order; // ascending order
-    });
+    // no more need to sort contributors with Albertos' API
+    // rehydratedContribs.sort((a, b) => {
+    //     // neg for a before b, positive for b before a, zero or nan a = b
+    //     return a.order - b.order; // ascending order
+    // });
 
     // 2. extract unique roles from that ordered list,
     // store contributors into array (bucket) for that role
     const uniqueContributorRoles = new Map();
     // O(n)
-    rehydratedContribs.forEach((contributor) => {
+    contribs.forEach((contributor) => {
         // if the role exists add the name to the bucket for that role
         if (uniqueContributorRoles.has(contributor.role)) {
             let newContributorList = uniqueContributorRoles.get(
@@ -172,5 +180,5 @@ export function unflattenContributors(contribs) {
         // 3.5 set final contributorRoleString into the map and replace the old contributor array
         uniqueContributorRoles.set(role, finalStringByRole);
     });
-    return uniqueContributorRoles;
+    return [...uniqueContributorRoles.values()];
 }
