@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { PropTypes } from "prop-types";
 import { ResultItem } from "./ResultItem";
 
 // container component that renders multiple ResultItem components
@@ -8,12 +8,13 @@ export function ResultsPane({
     publications = [],
     error = false,
     numBooks = 0,
+    pristine,
 }) {
-    console.log("numBooks ", numBooks);
     const listItems = publications.map((book, i) => (
         <ResultItem
-            contributors={book.contributors}
-            date={book.date}
+            // book.contributors[0] is a quirk of Alberto's API wrapping the contributor array in an array
+            contributors={book.contributors[0]}
+            date={book.dateBook}
             description={book.description}
             identifier={book.id}
             index={book.id + i}
@@ -27,18 +28,18 @@ export function ResultsPane({
         <section>
             <header>
                 <h2 className="osq-resultsheader">
-                    {error &&
+                    {/* TODO: cleanup - remove error here since this component will not render if there is an error */}
+                    {!pristine &&
+                        error &&
                         "Sorry, a server error has occurred. Please try your search again later.\n"}
-                    {publications.length > 0
-                        ? `Results: ${publications.length} books`
-                        : "Results: None"}
+                    {publications.length > 0 &&
+                        `Results: ${publications.length} books`}
                 </h2>
             </header>
             <div>
-                {publications.length > 0 ? (
-                    listItems
-                ) : (
-                    <span>Please try another search.</span>
+                {publications.length > 0 && listItems}
+                {!pristine && publications.length == 0 && (
+                    <span>Please try another search yeah.</span>
                 )}
             </div>
         </section>
@@ -46,8 +47,6 @@ export function ResultsPane({
 }
 
 ResultsPane.propTypes = {
-    // books: PropTypes.array,
-    // they are not books, they are publications of different kinds of media
     publications: PropTypes.array,
     // use these
     // NOTE: this component in react doesn't even need to know if it should display
@@ -62,5 +61,6 @@ ResultsPane.propTypes = {
     // TODO: does this belong on the pane or does it belong on the item
     // maxDescriptionLength: PropTypes.number,
     numBooks: PropTypes.number.isRequired,
+    pristine: PropTypes.bool,
     // results: PropTypes.array.required,
 };
