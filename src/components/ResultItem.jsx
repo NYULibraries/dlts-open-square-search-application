@@ -1,6 +1,9 @@
 import React from "react";
-import { string } from "prop-types";
-import { getThumbnailUrl, unflattenContributors } from "../utils/utils";
+import { PropTypes } from "prop-types";
+import {
+    getThumbnailUrl,
+    /*unflattenContributors*/ sortContributorsIntoRoleBuckets,
+} from "../utils/utils";
 import "./ResultItem.css";
 
 // individual result item
@@ -47,14 +50,14 @@ export function ResultItem({
                             <div className="book-subtitle">{subtitle}</div>
                         </a>
                     </div>
-                    {/* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/forEach */}
-                    {unflattenContributors(contributors).forEach(
-                        (contributorInRoleSentece, roleName) => {
-                            <div className="author-group">
-                                <span className="rolename">{{ roleName }}</span>
-                                contributorsInRoleSentence
-                            </div>;
-                        }
+                    {sortContributorsIntoRoleBuckets(contributors).map(
+                        (contributorSentenceByType, index) => (
+                            <div className="author-group" key={index}>
+                                <span className="rolename">
+                                    {contributorSentenceByType}
+                                </span>
+                            </div>
+                        )
                     )}
                     <div className="pubdate">
                         <span>Published: </span>
@@ -68,13 +71,15 @@ export function ResultItem({
     );
 }
 
+// TODO: proptypes deprecated in react 19, use typescript
+// https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-proptypes-and-defaultprops
 ResultItem.propTypes = {
     // contributors is a stringified json object that needs parsing
-    contributors: string,
-    date: string,
-    identifier: string,
-    description: string,
-    maxDescriptionLength: Number,
-    subtitle: string,
-    title: string,
+    contributors: PropTypes.array,
+    date: PropTypes.string,
+    identifier: PropTypes.string,
+    description: PropTypes.string,
+    maxDescriptionLength: PropTypes.number,
+    subtitle: PropTypes.string,
+    title: PropTypes.string,
 };
