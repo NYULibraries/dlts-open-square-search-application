@@ -4,6 +4,7 @@ import App from "./App.jsx";
 import "./index.css";
 // import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+// TODO: add react router when ready to pass queries to url
 // const router = createBrowserRouter([
 //   {
 //     path: "/",
