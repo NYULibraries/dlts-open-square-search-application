@@ -1,10 +1,8 @@
 .book-summary-hold {
-    color: red;
 }
 
 .container {
     display: flex;
-    border: 1px solid blue;
 }
 
 .thumbnail-item {
