@@ -27,8 +27,8 @@ flowchart TD
     nyupress[nyupress]
     supadu[supadu]
     end
-    metarepo[Metadata Github Repository]
-    albAPI[Alberto's API <br/> w/cache]
+    metarepo[Metadata Github Repository<br/> old source of truth for Hugo site]
+    albAPI[DLTS Viewer API<br/> w/cache]
     solr[Solr OpenSquare]
     subgraph front-end
     osHugo[OpenSquare Hugo]
@@ -39,7 +39,7 @@ flowchart TD
     nyupress -- uploads to --> supadu
     %% metarepo --> osHugo
     supadu-- provides data to -->albAPI
-    albAPI<-- query data -->solr
+    albAPI<-- relays query data from search -->solr
     albAPI--builds static pages from -->osHugo
     osHugo-- links to --> osSearch
     osSearch<--queries solr through -->albAPI
@@ -138,19 +138,17 @@ npm run preview
 
 ## Deployment
 
-> pre-requisites:
->
-> -   aws cli
-> -   aws cli credentials
+Pre-requisites (not in devcontainer, needed on your development machine)
+- [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- aws cli credentials provisioned by the devops team with the following abilities:
+  - s3 bucket (write)
+  - cloudfront (invalidation)
 
-A deploying this application requires the following actions
+Deploying this application requires the following actions
 
 1. Building locally
 2. using aws cli to sync the `dist/` directory into S3 (this bucket is only for the search application)
-
-Options to deploy this application
-
-1. local build and aws sync
+3. invalidating cache so that changes are seen immediately
 
 ```
 # development environment
@@ -169,35 +167,25 @@ npm run deploy
 npm run inv-cache
 ```
 
--   [ ] TODO: s3 rm s3 sync script
--   [ ] TODO: invalidate cache script
--   [ ] TODO:
-
-2. github actions build and push
-3. github actions build and push in dev containers
-
--   no git tagging, just deploy tips of branches
--   [ ] TODO: add script for S3 bucket local push
-    -   build application for correct environment
-    -   TODO: what is bastion?
-    -   ssh into correct environment
-    -   rsync `dist/` into S3
--   [ ] TODO: create CICD Github Action for S3 bucket build + push
+Future upgrades to this process:
+- aws cli installed within devcontainer (passing aws credential into container)
+- github actions build and push in devcontainers (no need to provision aws credentials, no sitting credentials on dev machines)
     -   pros:
         -   no need to store AWS keys locally
-        -   no need to hanlde SSH manually
-        -   no nee
+        -   deployment is not manual
     -   cons:
         -   price for runners if we don't have local Actions Servers
+        -   TODO: look into alloted hours with enterprise accounts for Github Actions
     -   steps:
         -   store variables in secrets store
-        -   ubuntu, node, npm
-        -   build
+        -   use devcontainer setup for build environment
+        -   create artifact
         -   aws copy and deploy
+- git tagging practices, and gitops deployments triggered by branch merges
 
 ## Infrastructure Configuration post Deployment
 
--   re-route of 404 page to index.html
+-   re-route of 404 page to index.html (static site with client side rendered react needs this redirect to hanlde 404 locally)
 -   configure cloudfront distribution pages for error handling too
 
 ### Run all tests
