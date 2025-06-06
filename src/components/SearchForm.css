@@ -2,6 +2,11 @@ button {
     border: 1px solid transparent
 }
 
+button:hover {
+    border-color: black;
+    color: white;
+}
+
 .container {
     display: flex
 }
@@ -47,9 +52,9 @@ form {
     width: auto;
     height: 97%;
 }
-#osq-search [type=submit] svg:hover {
+/* #osq-search [type=submit] svg:hover {
     color: #fff;
-}
+} */
 
 svg:not([fill]) {
     fill: currentColor;
