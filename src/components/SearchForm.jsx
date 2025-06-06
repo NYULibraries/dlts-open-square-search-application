@@ -70,7 +70,12 @@ export function SearchForm() {
                         id="search-input"
                         name="search"
                     />
-                    <button type="submit" aria-label="submit" value="submit">
+                    <button
+                        type="submit"
+                        aria-label="submit"
+                        value="submit"
+                        disabled={searching}
+                    >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
