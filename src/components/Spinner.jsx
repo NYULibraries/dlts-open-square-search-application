@@ -8,7 +8,7 @@ import "./Spinner.css";
 */
 export function Spinner() {
     return (
-        <div id="spinner" class="osq-pane osq-pane-results">
+        <div id="spinner" className="osq-pane osq-pane-results">
             <div className="overlay">
                 <div className="loader">
                     <div></div>
