@@ -1,14 +1,16 @@
 import React from "react";
 import { PropTypes } from "prop-types";
 import { ResultItem } from "./ResultItem";
+// import { Error } from "./Error";
 
 // container component that renders multiple ResultItem components
 // or displays helper texts for errors and empty searches
 export function ResultsPane({
     publications = [],
-    error = false,
-    numBooks = 0,
-    // pristine,
+    error,
+    errorMessage,
+    // numBooks = 0,
+    searched,
 }) {
     const listItems = publications.map((book, i) => (
         <ResultItem
@@ -26,21 +28,31 @@ export function ResultsPane({
     ));
     return (
         <section>
-            <header>
-                <h2 className="osq-resultsheader">
-                    {/* TODO: cleanup - remove error here since this component will not render if there is an error */}
-                    {error &&
-                        "Sorry, a server error has occurred. Please try your search again later.\n"}
-                    {publications.length > 0 &&
-                        `Results: ${publications.length} books`}
-                </h2>
-            </header>
-            <div>
-                {publications.length > 0 && listItems}
-                {/* {publications.length == 0 && (
-                    <span>Please try another search yeah.</span>
-                )} */}
+            <div className="osq-panes" style={{ "padding-top": 32 }}>
+                {/* TODO: consider making this ResultsPaneHeader */}
+                <div className="osq-results-hold">
+                    {/* search success scenario */}
+                    {searched && publications.length > 0 && (
+                        <h2 className="osq-resultsheader">
+                            Results: {publications.length} books
+                        </h2>
+                    )}
+                    {/* search empty scenario */}
+                    {searched && publications.length == 0 && (
+                        <>
+                            <h2 className="osq-resultsheader">Results: None</h2>
+                            <span>Please try another search</span>
+                        </>
+                    )}
+                    {/* search failure scenario */}
+                    {searched && error && (
+                        <div>
+                            Error contacting DLTS Viewer API: {errorMessage}
+                        </div>
+                    )}
+                </div>
             </div>
+            {searched && publications.length > 0 && listItems}
         </section>
     );
 }
@@ -54,12 +66,13 @@ ResultsPane.propTypes = {
     // Ellipsis character -- on Macos use key combination `Option + ;`
     // ellipsis: PropTypes.String,
     error: PropTypes.bool,
+    errorMessage: PropTypes.string,
     // explore this shape a little more
     // TODO: does this belong on the pane or does it belong on the item
     // highlights: PropTypes.Object.required,
     // TODO: does this belong on the pane or does it belong on the item
     // maxDescriptionLength: PropTypes.number,
-    numBooks: PropTypes.number.isRequired,
-    pristine: PropTypes.bool,
+    // numBooks: PropTypes.number.isRequired,
     // results: PropTypes.array.required,
+    searched: PropTypes.bool.isRequired,
 };

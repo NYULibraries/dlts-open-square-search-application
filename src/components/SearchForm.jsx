@@ -2,7 +2,6 @@ import React from "react";
 import { useState } from "react";
 import { Spinner } from "./Spinner";
 import { ResultsPane } from "./ResultsPane";
-import { Error } from "./Error";
 import { solrSearch } from "../utils/open-square-solr";
 import "./SearchForm.css";
 
@@ -12,7 +11,8 @@ export function SearchForm() {
     const [errorMessage, setErrorMessage] = useState("CORS");
     const [searching, setSearching] = useState(false);
     const [publications, setPublications] = useState([]);
-    // const [pristine, setPristine] = useState(true);
+    // used to determine if the user has done any searches at all yet
+    const [searched, setSearched] = useState(false);
     // note: there is no initial load of data, search bar shown empty
     // const [publications, setPublications] = useState(initialDataLoad.docs);
 
@@ -28,6 +28,7 @@ export function SearchForm() {
         // TODO: add client side input sanitization
         const query = event.target.search.value;
         // setPristine(false);
+        setSearched(true);
         setSearching(true);
         setPublications([]);
 
@@ -75,16 +76,13 @@ export function SearchForm() {
             const data = await solrSearch(query, QUERY_FIELDS);
             if (data.numFound > 0) {
                 setSearching(false);
-                console.log(data.docs);
                 setPublications(data.docs);
             } else {
                 setSearching(false);
-                setError(true);
-                setErrorMessage("No Publications Found");
             }
         } catch (error) {
             setError(true);
-            setErrorMessage(`Server Error: ${error.message}`);
+            setErrorMessage(error.message);
         }
     };
 
@@ -117,16 +115,16 @@ export function SearchForm() {
                 </div>
             </form>
             {searching && <Spinner />}
-            {error && <Error message={errorMessage} />}
-            {!error && !searching && publications && (
+            {!searching && publications && (
                 <ResultsPane
                     publications={publications}
                     error={error}
+                    errorMessage={errorMessage}
                     // highlights={}
                     // maxDescriptionLength={publications.maxDescriptionLength}
                     numBooks={publications.length}
                     // numBooks={}
-                    // pristine
+                    searched={searched}
                 />
             )}
         </section>
