@@ -28,7 +28,7 @@ export function ResultsPane({
     ));
     return (
         <section>
-            <div className="osq-panes" style={{ "padding-top": 32 }}>
+            <div className="osq-panes" style={{ paddingTop: 32 }}>
                 {/* TODO: consider making this ResultsPaneHeader */}
                 <div className="osq-results-hold">
                     {/* search success scenario */}
