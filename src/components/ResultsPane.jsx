@@ -8,7 +8,7 @@ export function ResultsPane({
     publications = [],
     error = false,
     numBooks = 0,
-    pristine,
+    // pristine,
 }) {
     const listItems = publications.map((book, i) => (
         <ResultItem
@@ -29,8 +29,7 @@ export function ResultsPane({
             <header>
                 <h2 className="osq-resultsheader">
                     {/* TODO: cleanup - remove error here since this component will not render if there is an error */}
-                    {!pristine &&
-                        error &&
+                    {error &&
                         "Sorry, a server error has occurred. Please try your search again later.\n"}
                     {publications.length > 0 &&
                         `Results: ${publications.length} books`}
@@ -38,9 +37,9 @@ export function ResultsPane({
             </header>
             <div>
                 {publications.length > 0 && listItems}
-                {!pristine && publications.length == 0 && (
+                {/* {publications.length == 0 && (
                     <span>Please try another search yeah.</span>
-                )}
+                )} */}
             </div>
         </section>
     );

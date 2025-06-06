@@ -12,7 +12,7 @@ export function SearchForm() {
     const [errorMessage, setErrorMessage] = useState("CORS");
     const [searching, setSearching] = useState(false);
     const [publications, setPublications] = useState([]);
-    const [pristine, setPristine] = useState(true);
+    // const [pristine, setPristine] = useState(true);
     // note: there is no initial load of data, search bar shown empty
     // const [publications, setPublications] = useState(initialDataLoad.docs);
 
@@ -92,7 +92,7 @@ export function SearchForm() {
                     // maxDescriptionLength={publications.maxDescriptionLength}
                     numBooks={publications.length}
                     // numBooks={}
-                    pristine
+                    // pristine
                 />
             )}
         </section>
