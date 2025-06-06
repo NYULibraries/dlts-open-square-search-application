@@ -155,17 +155,17 @@ Deploying this application requires the following actions
 # development environment
 npm run build-dev
 npm run deploy-dev
-npm run inv-cache-dev
+npm run cache-inv-dev
 
 # staging environment
 npm run build-stage
 npm run deploy-stage
-npm run inv-cache-stage
+npm run cache-inv-stage
 
 # production environment
 npm run build
 npm run deploy
-npm run inv-cache
+npm run cache-inv
 ```
 
 Future upgrades to this process:
