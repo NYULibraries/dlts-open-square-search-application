@@ -53,14 +53,6 @@ export function SearchForm() {
 
     return (
         <section>
-            {/*
-            <p>NODE_ENV: {process.env.NODE_ENV}</p>
-            <p>import.meta.env.MODE: {import.meta.env.MODE}</p>
-            <p>import.meta.env.PROD: {import.meta.env.PROD}</p>
-            <p>import.meta.env.DEV: {import.meta.env.DEV}</p>
-            <p>import.meta.env.SSR: {import.meta.env.SSR}</p>
-            <p>import.meta.env.VITE_TITLE: {import.meta.env.VITE_TITLE}</p>
-            */}
             <form id="osq-search" onSubmit={handleSubmit}>
                 <div display="flex" className="container">
                     <input
