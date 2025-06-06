@@ -31,8 +31,8 @@ flowchart TD
     albAPI[DLTS Viewer API<br/> w/cache]
     solr[Solr OpenSquare]
     subgraph front-end
-    osHugo[OpenSquare Hugo]
-    osSearch[OpenSquare Search]
+    osHugo[dlts-open-square <br/> Hugo]
+    osSearch[dlts-open-square-search <br/> Search]
     end
 
     %% link boxes id --message--> id
@@ -41,7 +41,7 @@ flowchart TD
     supadu-- provides data to -->albAPI
     albAPI<-- relays query data from search -->solr
     albAPI--builds static pages from -->osHugo
-    osHugo-- links to --> osSearch
+    osHugo<-- links to --> osSearch
     osSearch<--queries solr through -->albAPI
     albAPI-- feeds supadu data into -->metarepo
 ```
@@ -139,10 +139,11 @@ npm run preview
 ## Deployment
 
 Pre-requisites (not in devcontainer, needed on your development machine)
-- [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
-- aws cli credentials provisioned by the devops team with the following abilities:
-  - s3 bucket (write)
-  - cloudfront (invalidation)
+
+-   [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+-   aws cli credentials provisioned by the devops team with the following abilities:
+    -   s3 bucket (write)
+    -   cloudfront (invalidation)
 
 Deploying this application requires the following actions
 
@@ -168,8 +169,9 @@ npm run inv-cache
 ```
 
 Future upgrades to this process:
-- aws cli installed within devcontainer (passing aws credential into container)
-- github actions build and push in devcontainers (no need to provision aws credentials, no sitting credentials on dev machines)
+
+-   aws cli installed within devcontainer (passing aws credential into container)
+-   github actions build and push in devcontainers (no need to provision aws credentials, no sitting credentials on dev machines)
     -   pros:
         -   no need to store AWS keys locally
         -   deployment is not manual
@@ -181,7 +183,7 @@ Future upgrades to this process:
         -   use devcontainer setup for build environment
         -   create artifact
         -   aws copy and deploy
-- git tagging practices, and gitops deployments triggered by branch merges
+-   git tagging practices, and gitops deployments triggered by branch merges
 
 ## Infrastructure Configuration post Deployment
 
