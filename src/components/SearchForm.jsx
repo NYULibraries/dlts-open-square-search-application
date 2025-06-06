@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Spinner } from "./Spinner";
 import { ResultsPane } from "./ResultsPane";
 import { Error } from "./Error";
-import { solrQueryFactory } from "../utils/utils";
+import { solrSearch } from "../utils/open-square-solr";
 import "./SearchForm.css";
 
 export function SearchForm() {
@@ -16,39 +16,76 @@ export function SearchForm() {
     // note: there is no initial load of data, search bar shown empty
     // const [publications, setPublications] = useState(initialDataLoad.docs);
 
-    // yes partial matching with highlighting
-
-    // TODO: handle query params with useSearchParams from react router
-    // const handleSearchParams = () => {
-    //     pass the search parameters to the url
-    // };
-
     /**
      * method that makes the fetch call to Alberto's API and sets the state
      * @param {event} event - browser event
      */
-    const handleSubmit = (event) => {
-        // TODO: how do you handle multiple searches one after another?
-        // TODO: do you remove the previous state of the search and then populate with data from fetch call?
+    // const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
+        // TODO: debouncing or request cancellation
+        // button is disabled when searching
         event.preventDefault();
-        setPristine(false);
+        // TODO: add client side input sanitization
+        const query = event.target.search.value;
+        // setPristine(false);
         setSearching(true);
-        // handleSearchParams();
-        const queryURL = solrQueryFactory(event.target.search.value);
+        setPublications([]);
 
-        fetch(queryURL)
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.numFound > 0) {
-                    console.log(data.docs);
-                    setPublications(data.docs);
-                }
-            })
-            .catch((e) => {
+        // TODO: take the search params from the url if present (for cold navigation search)
+        // handleSearchParams();
+
+        // we pick up query fields from the front-end because they are intended to be weighted and modified
+        // by the user via the UI, and then passed back into the query for the search call.
+        // for now, no query field manipulation yet
+        // use internal google doc for new keys in the newer solr schema
+        const QUERY_FIELDS = {
+            // author -> contributors
+            contributors: {
+                // author: {
+                highlight: true,
+                weight: 4,
+            },
+            // date -> dateOpenAccess
+            dateOpenAccess: {
+                // date: {
+                highlight: true,
+                weight: 1,
+            },
+            description: {
+                highlight: true,
+                weight: 2,
+            },
+            // series_names -> series
+            series: {
+                // series_names: {
+                highlight: true,
+                weight: 3,
+            },
+            subtitle: {
+                highlight: true,
+                weight: 4,
+            },
+            title: {
+                highlight: true,
+                weight: 4,
+            },
+        };
+
+        try {
+            const data = await solrSearch(query, QUERY_FIELDS);
+            if (data.numFound > 0) {
+                setSearching(false);
+                console.log(data.docs);
+                setPublications(data.docs);
+            } else {
+                setSearching(false);
                 setError(true);
-                setErrorMessage(e.message);
-            })
-            .finally(setSearching(false));
+                setErrorMessage("No Publications Found");
+            }
+        } catch (error) {
+            setError(true);
+            setErrorMessage(`Server Error: ${error.message}`);
+        }
     };
 
     return (
