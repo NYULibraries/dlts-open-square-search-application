@@ -61,7 +61,7 @@ export function ResultItem({
                     )}
                     <div className="pubdate">
                         <span>Published: </span>
-                        <span>{date}</span>
+                        <span>{date.substring(0, 4)}</span>
                     </div>
                     {/* TODO: check how highlighting will be passed down into descirption */}
                     <div className="description meta">{description}</div>
