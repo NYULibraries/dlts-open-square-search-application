@@ -110,7 +110,7 @@ export function sortContributorsIntoRoleBuckets(contribs) {
     // export function unflattenContributors(contribs) {
     // 1. transform contributors from flat string to JSON object
     // no more need to rehydrate contributors when using Alberto's API
-    // let rehydratedContribs = JSON.parse(contribs);
+    let rehydratedContribs = JSON.parse(contribs);
 
     // 1. sort the contributors by their `.order` key
     // O(n)
@@ -124,7 +124,8 @@ export function sortContributorsIntoRoleBuckets(contribs) {
     // store contributors into array (bucket) for that role
     const uniqueContributorRoles = new Map();
     // O(n)
-    contribs.forEach((contributor) => {
+    // contribs.forEach((contributor) => {
+    rehydratedContribs.forEach((contributor) => {
         // if the role exists add the name to the bucket for that role
         if (uniqueContributorRoles.has(contributor.role)) {
             let newContributorList = uniqueContributorRoles.get(
