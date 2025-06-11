@@ -11,6 +11,7 @@ export function SearchForm() {
     const [errorMessage, setErrorMessage] = useState("CORS");
     const [searching, setSearching] = useState(false);
     const [publications, setPublications] = useState([]);
+    const [highlighting, setHighlighting] = useState();
     // used to determine if the user has done any searches at all yet
     const [searched, setSearched] = useState(false);
     // note: there is no initial load of data, search bar shown empty
@@ -31,6 +32,7 @@ export function SearchForm() {
         setSearched(true);
         setSearching(true);
         setPublications([]);
+        setHighlighting();
 
         // TODO: take the search params from the url if present (for cold navigation search)
         // handleSearchParams();
@@ -74,9 +76,11 @@ export function SearchForm() {
 
         try {
             const data = await solrSearch(query, QUERY_FIELDS);
-            if (data.numFound > 0) {
+            if (data.response.numFound > 0) {
                 setSearching(false);
-                setPublications(data.docs);
+                setPublications(data.response.docs);
+                console.log(data.highlighting);
+                setHighlighting(data.highlighting);
             } else {
                 setSearching(false);
             }
@@ -120,7 +124,7 @@ export function SearchForm() {
                     publications={publications}
                     error={error}
                     errorMessage={errorMessage}
-                    // highlights={}
+                    highlighting={highlighting}
                     // maxDescriptionLength={publications.maxDescriptionLength}
                     numBooks={publications.length}
                     // numBooks={}
