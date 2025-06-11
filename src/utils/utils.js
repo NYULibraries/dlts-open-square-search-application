@@ -50,32 +50,33 @@ export function getDescription(result, maxDescriptionLength = 500) {
  * builds the URL for thumbnails in the ResultItem
  * @param {string} isbn - id of the book
  * @returns {string} url with isbn interpolated
- * TODO: verify if we want this value to be an environment variable
  */
 export function getThumbnailUrl(isbn) {
+    // TODO: verify if we want this value to be an environment variable
     return `https://nyu-opensquare-us.imgix.net/covers/${isbn}.jpg?auto=format&w=145`;
 }
 
 /**
- * highlights
- * result
- * field
- * returns highlighted fields given
+ * used in ResultItem component
+ * looks into the returned highlights and sees if there's a highlighted value to display
+ * if there is none, it displays the normally returned value by solr
+ * @param {*} highlights - the whole highlight object returned by solr
+ * @param {*} identifier - the id used by the book in solr
+ * @param {*} field - which field to find highlights for
+ * @returns string
+ * TODO: move this to utils
  */
 export function getFieldValueOrHighlightedFieldValue(
     highlights,
     result,
     field
 ) {
-    const identifier = result.identifier;
-
+    const identifier = result.openSquareId;
     if (highlights[identifier] && highlights[identifier][field]) {
-        // TODO: look into this section, this might return more data about how we highlight results in the search bar
         // We only want the first snippet
         return highlights[identifier][field][0];
     } else {
         const fieldValue = result[field];
-
         if (Array.isArray(fieldValue)) {
             return fieldValue[0];
         } else {
