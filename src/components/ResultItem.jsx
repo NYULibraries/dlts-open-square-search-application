@@ -2,7 +2,7 @@ import React from "react";
 import { PropTypes } from "prop-types";
 import {
     getThumbnailUrl,
-    /*unflattenContributors*/ sortContributorsIntoRoleBuckets,
+    sortContributorsIntoRoleBuckets,
 } from "../utils/utils";
 import "./ResultItem.css";
 
@@ -46,8 +46,17 @@ export function ResultItem({
                     <div className="book-title-group">
                         {/* a tag not a react router item since we want to navigate to this page */}
                         <a href={`/books/${identifier}/`}>
-                            <div className="book-title">{title}</div>
-                            <div className="book-subtitle">{subtitle}</div>
+                            <div
+                                className="book-title"
+                                // TODO: find a better solution that doesn't rely on dangerouslySetInnerHTML
+                                dangerouslySetInnerHTML={{ __html: title }}
+                            ></div>
+
+                            {/* <div className="book-subtitle">{subtitle}</div> */}
+                            <div
+                                className="book-subtitle"
+                                dangerouslySetInnerHTML={{ __html: subtitle }}
+                            ></div>
                         </a>
                     </div>
                     {sortContributorsIntoRoleBuckets(contributors).map(
@@ -63,8 +72,11 @@ export function ResultItem({
                         <span>Published: </span>
                         <span>{date.substring(0, 4)}</span>
                     </div>
-                    {/* TODO: check how highlighting will be passed down into descirption */}
-                    <div className="description meta">{description}</div>
+                    {/* <div className="description meta">{description}</div> */}
+                    <div
+                        className="description meta"
+                        dangerouslySetInnerHTML={{ __html: description }}
+                    ></div>
                 </div>
             </article>
         </div>
@@ -75,7 +87,9 @@ export function ResultItem({
 // https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-proptypes-and-defaultprops
 ResultItem.propTypes = {
     // contributors is a stringified json object that needs parsing
-    contributors: PropTypes.array,
+    // contributors: PropTypes.array,
+    // skipping viewer api and going direct to solr
+    contributors: PropTypes.string,
     date: PropTypes.string,
     identifier: PropTypes.string,
     description: PropTypes.string,
