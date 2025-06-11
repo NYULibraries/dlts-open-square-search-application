@@ -19,12 +19,13 @@ async function doFetch(params) {
         }
     });
     params = Object.assign(params, {
+        // `q` should work for edismax and lucene (standard)
+        // `query` is used for DLTS viewer API for some reason
         // Avoid `q : undefined` if q was deleted above or never present
-        // `q` shoudl work for edismax and lucene (standard)
         // q: params.q !== undefined ? encodeURIComponent(params.q) : "",
         defType: "edismax",
         indent: "on",
-        // wt: "json", // it's default already
+        wt: "json",
     });
 
     const queryStringParams = [];
@@ -53,7 +54,8 @@ async function doFetch(params) {
     const protocol = import.meta.env.VITE_VIEWER_API_PROTOCOL;
     const host = import.meta.env.VITE_VIEWER_API_HOST;
     const core = import.meta.env.VITE_SOLR_CORE_PATH;
-    const baseUrl = `${protocol}://${host}${core}&${queryString}`;
+    // const baseUrl = `${protocol}://${host}${core}&${queryString}`;
+    const baseUrl = `${import.meta.env.VITE_SOLR_URL}&${queryString}`;
     const response = await fetch(baseUrl);
 
     if (response.ok) {
@@ -88,21 +90,22 @@ export async function solrSearch(query, queryFields) {
     const querella = query ? `${query}` : "*:*";
 
     const params = {
-        // for some reason the API is not responding when sending `q`, so using query
-        query: querella,
+        // viewerAPI is not responding when sending `q`, so using query
+        // query: querella,
+        q: querella,
+        // https://discovery1.dlib.nyu.edu/solr/open-square-metadata/select?q=dad&fl=title,subtitle,description,author,date,identifier,coverHref,thumbHref&hl=true&hl.fl=author,date,description,series_names,subtitle,title&hl.fragsize=500&hl.simple.pre=%3Cmark%3E&hl.simple.post=%3C/mark%3E&hl.snippets=1&qf=author^4%20date^1%20description^2%20series_names^3%20subtitle^4%20title^4&rows=1999&sort=score%20desc,title_sort%20asc&defType=edismax&indent=on&wt=json
+        // TODO: what property to use for `coverHref`?
         // fl: "title,subtitle,description,author,date,identifier,coverHref,thumbHref",
-        // opensquare new schema
-        // author -> contributor.name
-        //
-        // fl: "identifier",
-        // hl: true,
-        // "hl.fl": getHlFlFromQueryFields(queryFields),
-        // "hl.fragsize": DEFAULT_HIGHLIGHT_FRAGMENT_SIZE,
-        // "hl.simple.pre": "<mark>",
-        // "hl.simple.post": "</mark>",
-        // "hl.snippets": 1,
-        // used for the DisMax query parser
-        // qf: getQfFromQueryFields(queryFields),
+        fl: "title,subtitle,description,contributors,dateOpenAccess,openSquareId,id", // openSquareId and id are the same thing = ISBN
+        // TODO: figure out if highlighting is being trimmed at the viewer API level
+        hl: true,
+        "hl.fl": getHlFlFromQueryFields(queryFields),
+        "hl.fragsize": DEFAULT_HIGHLIGHT_FRAGMENT_SIZE,
+        "hl.simple.pre": "<mark>",
+        "hl.simple.post": "</mark>",
+        "hl.snippets": 1,
+
+        qf: getQfFromQueryFields(queryFields),
         rows: 1999, // default is 10
         // sort: "score%20desc,title_sort%20asc",
     };
