@@ -1,29 +1,42 @@
 import React from "react";
 import { PropTypes } from "prop-types";
 import { ResultItem } from "./ResultItem";
+import { getFieldValueOrHighlightedFieldValue } from "../utils/utils";
 // import { Error } from "./Error";
 
 // container component that renders multiple ResultItem components
 // or displays helper texts for errors and empty searches
 export function ResultsPane({
     publications = [],
+    highlighting = {},
     error,
     errorMessage,
-    // numBooks = 0,
     searched,
 }) {
     const listItems = publications.map((book, i) => (
         <ResultItem
-            // book.contributors[0] is a quirk of Alberto's API wrapping the contributor array in an array
+            // book.contributors[0] is a quirk of Solr wrapping the contributor array in an array
             contributors={book.contributors[0]}
-            date={book.dateBook}
-            description={book.description}
+            date={book.dateOpenAccess}
+            description={getFieldValueOrHighlightedFieldValue(
+                highlighting,
+                book,
+                "description"
+            )}
             identifier={book.id}
             index={book.id + i}
             key={book.id + i}
             maxDescriptionLength={500}
-            subtitle={book.subtitle}
-            title={book.title}
+            subtitle={getFieldValueOrHighlightedFieldValue(
+                highlighting,
+                book,
+                "subtitle"
+            )}
+            title={getFieldValueOrHighlightedFieldValue(
+                highlighting,
+                book,
+                "title"
+            )}
         />
     ));
     return (
@@ -69,7 +82,8 @@ ResultsPane.propTypes = {
     errorMessage: PropTypes.string,
     // explore this shape a little more
     // TODO: does this belong on the pane or does it belong on the item
-    // highlights: PropTypes.Object.required,
+    // i think on the result pane becuase if not we would be passing the whole highlights object to the item
+    highlighting: PropTypes.object,
     // TODO: does this belong on the pane or does it belong on the item
     // maxDescriptionLength: PropTypes.number,
     // numBooks: PropTypes.number.isRequired,
