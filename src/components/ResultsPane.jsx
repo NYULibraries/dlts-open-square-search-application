@@ -2,7 +2,7 @@ import React from "react";
 import { PropTypes } from "prop-types";
 import { ResultItem } from "./ResultItem";
 import { getFieldValueOrHighlightedFieldValue } from "../utils/utils";
-// import { Error } from "./Error";
+import { Error } from "./Error";
 
 // container component that renders multiple ResultItem components
 // or displays helper texts for errors and empty searches
@@ -15,8 +15,11 @@ export function ResultsPane({
 }) {
     const listItems = publications.map((book, i) => (
         <ResultItem
-            // book.contributors[0] is a quirk of Solr wrapping the contributor array in an array
-            contributors={book.contributors[0]}
+            contributors={getFieldValueOrHighlightedFieldValue(
+                highlighting,
+                book,
+                "contributorsAsASentence"
+            )}
             date={book.dateOpenAccess}
             description={getFieldValueOrHighlightedFieldValue(
                 highlighting,
@@ -58,11 +61,7 @@ export function ResultsPane({
                         </>
                     )}
                     {/* search failure scenario */}
-                    {searched && error && (
-                        <div>
-                            Error contacting DLTS Viewer API: {errorMessage}
-                        </div>
-                    )}
+                    {searched && error && <Error message={errorMessage} />}
                 </div>
             </div>
             {searched && publications.length > 0 && listItems}
@@ -72,21 +71,10 @@ export function ResultsPane({
 
 ResultsPane.propTypes = {
     publications: PropTypes.array,
-    // use these
-    // NOTE: this component in react doesn't even need to know if it should display
-    // rendering logic should be carried in parent component
-    // display: PropTypes.Boolean.required,
-    // Ellipsis character -- on Macos use key combination `Option + ;`
-    // ellipsis: PropTypes.String,
     error: PropTypes.bool,
     errorMessage: PropTypes.string,
-    // explore this shape a little more
-    // TODO: does this belong on the pane or does it belong on the item
-    // i think on the result pane becuase if not we would be passing the whole highlights object to the item
     highlighting: PropTypes.object,
     // TODO: does this belong on the pane or does it belong on the item
     // maxDescriptionLength: PropTypes.number,
-    // numBooks: PropTypes.number.isRequired,
-    // results: PropTypes.array.required,
     searched: PropTypes.bool.isRequired,
 };
