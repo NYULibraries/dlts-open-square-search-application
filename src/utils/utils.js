@@ -60,6 +60,8 @@ export function getThumbnailUrl(isbn) {
  * used in ResultItem component
  * looks into the returned highlights and sees if there's a highlighted value to display
  * if there is none, it displays the normally returned value by solr
+ * when rendering the results from solr we will sometimes receive highlights
+ * this function helps choose the highlights over the original field values when present.
  * @param {*} highlights - the whole highlight object returned by solr
  * @param {*} identifier - the id used by the book in solr
  * @param {*} field - which field to find highlights for
@@ -71,11 +73,15 @@ export function getFieldValueOrHighlightedFieldValue(
     result,
     field
 ) {
-    const identifier = result.openSquareId;
+    console.log("getfieldhighlights");
+    const identifier = result.id;
+    // debugger;
     if (highlights[identifier] && highlights[identifier][field]) {
+        console.log("highlight found for field:", field);
         // We only want the first snippet
         return highlights[identifier][field][0];
     } else {
+        console.log("no highlight found");
         const fieldValue = result[field];
         if (Array.isArray(fieldValue)) {
             return fieldValue[0];
@@ -99,6 +105,7 @@ export function solrQueryFactory(query) {
 }
 
 /**
+ * TODO: delete in favor of open-square-solr.js
  * function that takes a flat contributors list and returns it
  * ordered and in an easy way to render as an Array for react to map over.
  * matching Hugo logic for naming here:
