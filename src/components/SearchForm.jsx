@@ -21,14 +21,12 @@ export function SearchForm() {
      * method that makes the fetch call to Alberto's API and sets the state
      * @param {event} event - browser event
      */
-    // const handleSubmit = (event) => {
     const handleSubmit = async (event) => {
         // TODO: debouncing or request cancellation
         // button is disabled when searching
         event.preventDefault();
         // TODO: add client side input sanitization
         const query = event.target.search.value;
-        // setPristine(false);
         setSearched(true);
         setSearching(true);
         setPublications([]);
@@ -42,15 +40,13 @@ export function SearchForm() {
         // for now, no query field manipulation yet
         // use internal google doc for new keys in the newer solr schema
         const QUERY_FIELDS = {
-            // author -> contributors
-            contributors: {
-                // author: {
+            // author -> contributors -> contributorsAsAString
+            contributorsAsASentence: {
                 highlight: true,
                 weight: 4,
             },
             // date -> dateOpenAccess
             dateOpenAccess: {
-                // date: {
                 highlight: true,
                 weight: 1,
             },
@@ -60,7 +56,6 @@ export function SearchForm() {
             },
             // series_names -> series
             series: {
-                // series_names: {
                 highlight: true,
                 weight: 3,
             },
@@ -79,7 +74,6 @@ export function SearchForm() {
             if (data.response.numFound > 0) {
                 setSearching(false);
                 setPublications(data.response.docs);
-                console.log(data.highlighting);
                 setHighlighting(data.highlighting);
             } else {
                 setSearching(false);
