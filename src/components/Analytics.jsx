@@ -7,20 +7,15 @@ export const GoogleAnalytics = () => {
     useEffect(() => {
         // google analytics setup
         const gaTag = import.meta.env.VITE_GOOGLE_ANALYTICS_TRACKING_ID;
-        // const isProd = import.meta.env.PROD;
-        const isProd = true;
+        const isProd = import.meta.env.PROD;
         const hasPreviousScript1 = document.getElementById(
             "google-analytics-script1"
         );
         const hasPreviousScript2 = document.getElementById(
             "google-analytics-script2"
         );
-        console.log(isProd, gaTag, hasPreviousScript1, hasPreviousScript2);
 
         if (isProd && gaTag && !hasPreviousScript1 && !hasPreviousScript2) {
-            console.log("all checks met");
-            console.log("is this thing on?");
-
             // <script async src="https://www.googletagmanager.com/gtag/js?id=%VITE_GOOGLE_ANALYTICS_TRACKING_ID%"></script>
             const script1 = document.createElement("script");
             script1.id = "google-analytics-script1";
@@ -55,10 +50,6 @@ export const GoogleAnalytics = () => {
                 document.head.removeChild(s2);
             }
         };
-
-        // matomo setup
-        // run inside of useEffect to only run once when component mounts
-        // 1. avoid duplicates check if there's another script
     }, []); // empty dependency array makes this run once
 };
 
@@ -68,8 +59,7 @@ export const GoogleAnalytics = () => {
 export const MatomoAnalytics = () => {
     useEffect(() => {
         const matomoanalytics = import.meta.env.VITE_MATOMO_ANALYTICS_URL;
-        // const isProd = import.meta.env.PROD;
-        const isProd = true;
+        const isProd = import.meta.env.PROD;
         const hasMatomoAnalytics = document.getElementById("matomo-analytics");
         if (isProd && matomoanalytics && !hasMatomoAnalytics) {
             const sc = document.createElement("script");
