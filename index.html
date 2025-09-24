@@ -11,50 +11,6 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,500,600,700,900" rel="stylesheet">
     <link rel="stylesheet" href="https://opensquare.nyupress.org/css/style.css">
     <link rel="stylesheet" href="css/style.css">
-
-    <!-- google analytics -->
-    <script>
-        const googleanalytics = import.meta.env.VITE_GOOGLE_ANALYTICS_TRACKING_ID;
-        const isProd = import.meta.env.PROD;
-        if (isProd && googleanalytics){
-            const script = document.createElement("script");
-            script.src = `https://www.googletagmanager.com/gtag/js?id=${
-                googleanalytics
-            }`;
-            script.async = true;
-            document.head.appenChild(script);
-
-            const script2 = document.createElement("script");
-            script2.innerHTML = `
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', ${googleanalytics}, { 'anonymize_ip': true });
-            `;
-            document.head.appendChild(script2);
-        }
-    </script>
-
-    <!-- matomo analytics -->
-    <script>
-        const matomoanalytics = import.meta.env.VITE_MATOMO_ANALYTICS_URL;
-        if (isProd && matomoanalytics){
-            var _paq = window._paq = window._paq || [];
-            /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-            _paq.push(['trackPageView']);
-            _paq.push(['enableLinkTracking']);
-            (function() {
-                var u="https://" + matomoanalytics + "/";
-                _paq.push(['setTrackerUrl', u + 'matomo.php']);
-                _paq.push(['setSiteId', '18']);
-                var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-                g.async=true;
-                g.src="https://cdn.matomo.cloud/" + matomoanalytics + "/matomo.js";
-                s.parentNode.insertBefore(g,s);
-            })();
-        }
-    </script>
-
   </head>
 <body class="search-page">
     <div class="hold-all">
@@ -103,5 +59,6 @@
             </nav>
         </footer>
     </div>
+
 </body>
 </html>
