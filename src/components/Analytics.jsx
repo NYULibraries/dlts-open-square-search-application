@@ -16,12 +16,14 @@ export const GoogleAnalytics = () => {
         );
 
         if (isProd && gaTag && !hasPreviousScript1 && !hasPreviousScript2) {
+            // this is the requested tag by GA, I had to transform to work within useEffect
             // <script async src="https://www.googletagmanager.com/gtag/js?id=%VITE_GOOGLE_ANALYTICS_TRACKING_ID%"></script>
             const script1 = document.createElement("script");
             script1.id = "google-analytics-script1";
             script1.src = `https://www.googletagmanager.com/gtag/js?id=${gaTag}`;
             document.querySelector("head").appendChild(script1);
 
+            // this is the requested tag by GA, I had to transform to work within useEffect
             // <script>
             //     window.dataLayer = window.dataLayer || [];
             //     function gtag(){dataLayer.push(arguments);}
