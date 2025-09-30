@@ -124,7 +124,6 @@ npm run build
 
 ```
 # Uses environment variables from .env.dev
-# different than
 npm run build-dev
 
 # Uses environment variables from .env.stage
