@@ -7,40 +7,34 @@ import "./SearchForm.css";
 
 export function SearchForm() {
     const [error, setError] = useState(false);
-    // TODO: refine error message handling
-    const [errorMessage, setErrorMessage] = useState("CORS");
-    const [searching, setSearching] = useState(false);
-    const [publications, setPublications] = useState([]);
     const [highlighting, setHighlighting] = useState();
     // used to determine if the user has done any searches at all yet
     const [searched, setSearched] = useState(false);
-    // note: there is no initial load of data, search bar shown empty
-    // const [publications, setPublications] = useState(initialDataLoad.docs);
+    // use to determine if the user is in the middle of a search
+    // used to disable the button when searching
+    const [searching, setSearching] = useState(false);
+    // there is no initial load of data, search bar shown empty
+    const [publications, setPublications] = useState([]);
 
     /**
-     * method that makes the fetch call to Alberto's API and sets the state
+     * method that makes the fetch call to Solr
      * @param {event} event - browser event
      */
     const handleSubmit = async (event) => {
-        // TODO: debouncing or request cancellation
-        // button is disabled when searching
         event.preventDefault();
-        // TODO: add client side input sanitization
+
         const query = event.target.search.value;
         setSearched(true);
         setSearching(true);
         setPublications([]);
         setHighlighting();
 
-        // TODO: take the search params from the url if present (for cold navigation search)
-        // handleSearchParams();
-
         // we pick up query fields from the front-end because they are intended to be weighted and modified
         // by the user via the UI, and then passed back into the query for the search call.
         // for now, no query field manipulation yet
         // use internal google doc for new keys in the newer solr schema
         const QUERY_FIELDS = {
-            // author -> contributors -> contributorsAsAString
+            // author -> contributors -> contributorsAsASentence
             contributorsAsASentence: {
                 highlight: true,
                 weight: 4,
@@ -77,10 +71,11 @@ export function SearchForm() {
                 setHighlighting(data.highlighting);
             } else {
                 setSearching(false);
+                // no results hanlded in ResultsPane
             }
         } catch (error) {
+            setSearching(false);
             setError(true);
-            setErrorMessage(error.message);
         }
     };
 
@@ -117,11 +112,9 @@ export function SearchForm() {
                 <ResultsPane
                     publications={publications}
                     error={error}
-                    errorMessage={errorMessage}
                     highlighting={highlighting}
                     // maxDescriptionLength={publications.maxDescriptionLength}
                     numBooks={publications.length}
-                    // numBooks={}
                     searched={searched}
                 />
             )}
