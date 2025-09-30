@@ -2,7 +2,6 @@ import React from "react";
 import { PropTypes } from "prop-types";
 import { ResultItem } from "./ResultItem";
 import { getFieldValueOrHighlightedFieldValue } from "../utils/utils";
-// import { Error } from "./Error";
 
 // container component that renders multiple ResultItem components
 // or displays helper texts for errors and empty searches
