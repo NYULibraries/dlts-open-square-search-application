@@ -32,7 +32,6 @@ export function getDescription(result, maxDescriptionLength = 500) {
         result.highlights[identifier].description
     ) {
         // We only want the first snippet
-        // TODO: is this necessary? or can I just accomodate in the component, this is not a value that will change
         // Ellipsis character -- on Macos use key combination `Option + ;`
         // ellipsis={"…"}
         return (
@@ -41,7 +40,6 @@ export function getDescription(result, maxDescriptionLength = 500) {
             this.ellipsis
         );
     } else {
-        // TODO: can we include truncate here and not use it as a separate function?
         return truncate(result.description, maxDescriptionLength);
     }
 }
@@ -52,7 +50,6 @@ export function getDescription(result, maxDescriptionLength = 500) {
  * @returns {string} url with isbn interpolated
  */
 export function getThumbnailUrl(isbn) {
-    // TODO: verify if we want this value to be an environment variable
     return `https://nyu-opensquare-us.imgix.net/covers/${isbn}.jpg?auto=format&w=145`;
 }
 
@@ -66,22 +63,17 @@ export function getThumbnailUrl(isbn) {
  * @param {*} identifier - the id used by the book in solr
  * @param {*} field - which field to find highlights for
  * @returns string
- * TODO: move this to utils
  */
 export function getFieldValueOrHighlightedFieldValue(
     highlights,
     result,
     field
 ) {
-    console.log("getfieldhighlights");
     const identifier = result.id;
-    // debugger;
     if (highlights[identifier] && highlights[identifier][field]) {
-        console.log("highlight found for field:", field);
         // We only want the first snippet
         return highlights[identifier][field][0];
     } else {
-        console.log("no highlight found");
         const fieldValue = result[field];
         if (Array.isArray(fieldValue)) {
             return fieldValue[0];
@@ -95,7 +87,7 @@ export function getFieldValueOrHighlightedFieldValue(
  * creates the query used in the solr call for search
  * @param {string} query - query entered by the user
  */
-export function solrQueryFactory(query) {
+export function solrQueryFactorsolrQueryFactoryy(query) {
     // TODO: look into the `main.js` file for the dlts-opensquare-search-application
     const tempURL = `${import.meta.env.VITE_API_TO_SOLR_PROTOCOL}://${
         import.meta.env.VITE_API_TO_SOLR_HOST
