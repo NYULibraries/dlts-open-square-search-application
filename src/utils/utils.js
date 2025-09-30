@@ -87,7 +87,7 @@ export function getFieldValueOrHighlightedFieldValue(
  * creates the query used in the solr call for search
  * @param {string} query - query entered by the user
  */
-export function solrQueryFactorsolrQueryFactoryy(query) {
+export function solrQueryFactory(query) {
     // TODO: look into the `main.js` file for the dlts-opensquare-search-application
     const tempURL = `${import.meta.env.VITE_API_TO_SOLR_PROTOCOL}://${
         import.meta.env.VITE_API_TO_SOLR_HOST
