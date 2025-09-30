@@ -59,7 +59,7 @@ export function ResultsPane({
                         </>
                     )}
                     {/* search failure scenario */}
-                    {searched && error && <Error message={errorMessage} />}
+                    {searched && error && <Error />}
                 </div>
             </div>
             {searched && publications.length > 0 && listItems}
