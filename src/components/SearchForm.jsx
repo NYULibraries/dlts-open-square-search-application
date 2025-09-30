@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Spinner } from "./Spinner";
 import { ResultsPane } from "./ResultsPane";
 import { solrSearch } from "../utils/open-square-solr";
-import "./SearchForm.css";
 
 export function SearchForm() {
     const [error, setError] = useState(false);

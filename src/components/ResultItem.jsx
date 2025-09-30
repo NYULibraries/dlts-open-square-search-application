@@ -4,7 +4,6 @@ import {
     getThumbnailUrl,
     sortContributorsIntoRoleBuckets,
 } from "../utils/utils";
-import "./ResultItem.css";
 
 // individual result item
 // no need for state, iterated by parent component
