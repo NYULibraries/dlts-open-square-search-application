@@ -1,21 +1,10 @@
 import React from "react";
-import { PropTypes } from "prop-types";
 
-export function Error({ message }) {
+export function Error() {
     return (
-        <div>
-            {/* server call hangs */}
-            {/* server is off */}
-            {/* server responds with 404 or 500 */}
-            Apologies: technical difficulties. Please try again later {message}
-            Error contacting DLTS Viewer API: {message}
-            {/* no connection */}
+        <h2 className={`osq-resultsheader`}>
             Sorry, a server error has occurred. Please try your search again
             later.
-        </div>
+        </h2>
     );
 }
-
-Error.propTypes = {
-    message: PropTypes.string,
-};
