@@ -10,7 +10,6 @@ export function ResultsPane({
     publications = [],
     highlighting = {},
     error,
-    errorMessage,
     searched,
 }) {
     const listItems = publications.map((book, i) => (
@@ -45,16 +44,15 @@ export function ResultsPane({
     return (
         <section>
             <div className="osq-panes" style={{ paddingTop: 32 }}>
-                {/* TODO: consider making this ResultsPaneHeader */}
                 <div className="osq-results-hold">
                     {/* search success scenario */}
-                    {searched && publications.length > 0 && (
+                    {!error && searched && publications.length > 0 && (
                         <h2 className="osq-resultsheader">
                             Results: {publications.length} books
                         </h2>
                     )}
                     {/* search empty scenario */}
-                    {searched && publications.length == 0 && (
+                    {!error && searched && publications.length == 0 && (
                         <>
                             <h2 className="osq-resultsheader">Results: None</h2>
                             <span>Please try another search</span>
@@ -72,9 +70,6 @@ export function ResultsPane({
 ResultsPane.propTypes = {
     publications: PropTypes.array,
     error: PropTypes.bool,
-    errorMessage: PropTypes.string,
     highlighting: PropTypes.object,
-    // TODO: does this belong on the pane or does it belong on the item
-    // maxDescriptionLength: PropTypes.number,
     searched: PropTypes.bool.isRequired,
 };
