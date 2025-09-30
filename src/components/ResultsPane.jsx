@@ -40,7 +40,7 @@ export function ResultsPane({
         />
     ));
     return (
-        <section>
+        <>
             <div className="osq-panes" style={{ paddingTop: 32 }}>
                 {/* TODO: consider making this ResultsPaneHeader */}
                 <div className="osq-results-hold">
@@ -66,7 +66,7 @@ export function ResultsPane({
                 </div>
             </div>
             {searched && publications.length > 0 && listItems}
-        </section>
+        </>
     );
 }
 
