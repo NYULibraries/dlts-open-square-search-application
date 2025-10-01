@@ -19,7 +19,7 @@ export function ResultsPane({
                 book,
                 "contributorsAsASentence"
             )}
-            date={book.dateOpenAccess}
+            date={book.dateBook}
             description={getFieldValueOrHighlightedFieldValue(
                 highlighting,
                 book,
