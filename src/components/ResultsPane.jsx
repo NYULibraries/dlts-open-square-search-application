@@ -42,7 +42,7 @@ export function ResultsPane({
         />
     ));
     return (
-        <section>
+        <>
             <div className="osq-panes" style={{ paddingTop: 32 }}>
                 <div className="osq-results-hold">
                     {/* search success scenario */}
@@ -63,7 +63,7 @@ export function ResultsPane({
                 </div>
             </div>
             {searched && publications.length > 0 && listItems}
-        </section>
+        </>
     );
 }
 
