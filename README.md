@@ -18,36 +18,43 @@ Tested with:
 
 ## Architecture
 
-> https://mermaid.js.org/syntax/flowchart.html
-
 ```mermaid
+---
+title: Data Flow OpenSquare Application
+---
 flowchart TD
     %% declare boxes id[text]
     subgraph press
     nyupress[nyupress]
     supadu[supadu]
     end
-    metarepo[Metadata Github Repository<br/> old source of truth for Hugo site]
-    albAPI[DLTS Viewer API<br/> w/cache]
-    solr[Solr OpenSquare]
+    viewerAPI["DLTS Viewer API
+    w/cache"]
+    solr["Solr
+    open-square-metadata-v1"]
+    go[Go publication/ingestion script]
     subgraph front-end
-    osHugo[dlts-open-square <br/> Hugo]
-    osSearch[dlts-open-square-search <br/> Search]
+    osHugo["dlts-open-square
+    Hugo"]
+    osSearch["dlts-open-square-search
+    Vite/React"]
     end
 
     %% link boxes id --message--> id
     nyupress -- uploads to --> supadu
-    %% metarepo --> osHugo
-    supadu-- provides data to -->albAPI
-    albAPI<-- relays query data from search -->solr
-    albAPI--builds static pages from -->osHugo
-    osHugo<-- links to --> osSearch
-    osSearch<--queries solr through -->albAPI
-    albAPI-- feeds supadu data into -->metarepo
+    supadu -- queries all data --> go
+    go -- ingests all data --> solr
+    osSearch --> solr
+    osHugo <-- links to --> osSearch
+    osHugo <-- builds from --> viewerAPI
+    viewerAPI -- pulls data from --> supadu
 ```
+
+> https://mermaid.js.org/syntax/flowchart.html
 
 ### Environments
 
+TODO: review if gitops branch separation is really necessary and not a premature optimization
 > separated under the gitops practice of Branch tips as the single source of truth for each environment.
 
 -   Development (local and deployed)
@@ -357,39 +364,3 @@ server instead of the production Solr server.
 -   `?solrErrorSimulation=search`
     -   Simulates Solr request error for initial topic/full-text search
 
-## TODO: add publishing process as a mermaidjs flow
-
-```mermaid
----
-title: Publication Workflows for OpenSquare (Hugo, API, Solr, and SearchApp)
----
-graph LR
-
-    %% declare the boxes
-    pre[Before: send EPUBs to Alberto]
-    1["May 14: Check for Library EPUB and PDF"]
-    2["May 19: Metadata to Biblio (1 week)"]
-    3["May 26: Metadata to Supadu (2 days)"]
-    4["May 28: Remediate/Ingest (1 week)"]
-    5["June 4: Send EPUBs to Press for upload to CoreSource (1 week)"]
-    6["June 23: Publish"]
-    7["Two new front list books are scheduled to be published on 6/23"]
-
-    %% link the boxes
-    pre-->1
-    1-->2
-    2-->3
-    3-->4
-    4-->5
-    5-->6
-    6-->7
-```
-
-```mermaid
-sequenceDiagram
-    participant B as NYUPress
-    participant A as Alberto
-    participant JG as JonathanGreenberg
-    B->>A: hola
-    JG->>A: hola
-```
