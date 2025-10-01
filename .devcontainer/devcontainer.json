@@ -26,9 +26,14 @@
 				"yzhang.markdown-all-in-one"
 			]
 		}
-	}
+	},
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "yarn install",
+	"postCreateCommand": "npm clean-install",
+    "runArgs": [
+        // comment this in for local development with solr running within docker compose
+        // "--network=opensquare_network",
+        "--name=vite_dev_container"
+    ]
 	// Configure tool-specific properties.
 	// "customizations": {},
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.

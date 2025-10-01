@@ -1,10 +1,10 @@
 import React from "react";
-import { PropTypes } from "prop-types";
 
-export function Error({ message }) {
-    return <div>Some error {message}</div>;
+export function Error() {
+    return (
+        <h2 className={`osq-resultsheader`}>
+            Sorry, a server error has occurred. Please try your search again
+            later.
+        </h2>
+    );
 }
-
-Error.propTypes = {
-    message: PropTypes.string,
-};

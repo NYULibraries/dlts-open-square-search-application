@@ -6,50 +6,40 @@ import { solrSearch } from "../utils/open-square-solr";
 
 export function SearchForm() {
     const [error, setError] = useState(false);
-    // TODO: refine error message handling
-    const [errorMessage, setErrorMessage] = useState("CORS");
-    const [searching, setSearching] = useState(false);
-    const [publications, setPublications] = useState([]);
     const [highlighting, setHighlighting] = useState();
     // used to determine if the user has done any searches at all yet
     const [searched, setSearched] = useState(false);
-    // note: there is no initial load of data, search bar shown empty
-    // const [publications, setPublications] = useState(initialDataLoad.docs);
+    // use to determine if the user is in the middle of a search
+    // used to disable the button when searching
+    const [searching, setSearching] = useState(false);
+    // there is no initial load of data, search bar shown empty
+    const [publications, setPublications] = useState([]);
 
     /**
-     * method that makes the fetch call to Alberto's API and sets the state
+     * method that makes the fetch call to Solr
      * @param {event} event - browser event
      */
-    // const handleSubmit = (event) => {
     const handleSubmit = async (event) => {
-        // TODO: debouncing or request cancellation
-        // button is disabled when searching
         event.preventDefault();
-        // TODO: add client side input sanitization
+
         const query = event.target.search.value;
-        // setPristine(false);
         setSearched(true);
         setSearching(true);
         setPublications([]);
         setHighlighting();
-
-        // TODO: take the search params from the url if present (for cold navigation search)
-        // handleSearchParams();
 
         // we pick up query fields from the front-end because they are intended to be weighted and modified
         // by the user via the UI, and then passed back into the query for the search call.
         // for now, no query field manipulation yet
         // use internal google doc for new keys in the newer solr schema
         const QUERY_FIELDS = {
-            // author -> contributors
-            contributors: {
-                // author: {
+            // author -> contributors -> contributorsAsASentence
+            contributorsAsASentence: {
                 highlight: true,
                 weight: 4,
             },
             // date -> dateOpenAccess
             dateOpenAccess: {
-                // date: {
                 highlight: true,
                 weight: 1,
             },
@@ -59,7 +49,6 @@ export function SearchForm() {
             },
             // series_names -> series
             series: {
-                // series_names: {
                 highlight: true,
                 weight: 3,
             },
@@ -78,14 +67,14 @@ export function SearchForm() {
             if (data.response.numFound > 0) {
                 setSearching(false);
                 setPublications(data.response.docs);
-                console.log(data.highlighting);
                 setHighlighting(data.highlighting);
             } else {
                 setSearching(false);
+                // no results hanlded in ResultsPane
             }
         } catch (error) {
+            setSearching(false);
             setError(true);
-            setErrorMessage(error.message);
         }
     };
 
@@ -100,7 +89,6 @@ export function SearchForm() {
                                 aria-label="Search for books"
                                 placeholder="Search for books"
                                 type="text"
-                                id="search-input"
                                 id="osq-searchinput"
                                 name="search"
                             />
@@ -122,22 +110,18 @@ export function SearchForm() {
                         </div>
                     </form>
                 </div>
-            </section>
-            <div>
                 {searching && <Spinner />}
                 {!searching && publications && (
                     <ResultsPane
                         publications={publications}
                         error={error}
-                        errorMessage={errorMessage}
                         highlighting={highlighting}
                         // maxDescriptionLength={publications.maxDescriptionLength}
                         numBooks={publications.length}
-                        // numBooks={}
                         searched={searched}
                     />
                 )}
-            </div>
+            </section>
         </>
     );
 }

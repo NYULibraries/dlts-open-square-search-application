@@ -44,16 +44,9 @@ async function doFetch(params) {
 
     const queryString = queryStringParams.join("&");
 
-    // query should look like this at the end
-    // https://discovery1.dlib.nyu.edu/solr/open-square-metadata/select?q=dad&fl=title,subtitle,description,author,date,identifier,coverHref,thumbHref&hl=true&hl.fl=author,date,description,series_names,subtitle,title&hl.fragsize=500&hl.simple.pre=%3Cmark%3E&hl.simple.post=%3C/mark%3E&hl.snippets=1&qf=author^4%20date^1%20description^2%20series_names^3%20subtitle^4%20title^4&rows=1999&sort=score%20desc,title_sort%20asc&defType=edismax&indent=on&wt=json
-    // query that works when sending to viewer api
-    // https://stage-sites.dlib.nyu.edu/viewer/api/v1/search?index=open-square-metadata-v1&query=*english*
-    // now mixing both urls
-    // https://stage-sites.dlib.nyu.edu/viewer/api/v1/search?index=open-square-metadata-v1&q=dad&fl=title,subtitle,description,author,date,identifier,coverHref,thumbHref&hl=true&hl.fl=author,date,description,series_names,subtitle,title&hl.fragsize=500&hl.simple.pre=%3Cmark%3E&hl.simple.post=%3C/mark%3E&hl.snippets=1&qf=author^4%20date^1%20description^2%20series_names^3%20subtitle^4%20title^4&rows=1999&sort=score%20desc,title_sort%20asc&defType=edismax&indent=on&wt=json
-    // https://stage-sites.dlib.nyu.edu/viewer/api/v1/search?index=open-square-metadata-v1&q=dad
-    const protocol = import.meta.env.VITE_VIEWER_API_PROTOCOL;
-    const host = import.meta.env.VITE_VIEWER_API_HOST;
-    const core = import.meta.env.VITE_SOLR_CORE_PATH;
+    // const protocol = import.meta.env.VITE_VIEWER_API_PROTOCOL;
+    // const host = import.meta.env.VITE_VIEWER_API_HOST;
+    // const core = import.meta.env.VITE_SOLR_CORE_PATH;
     // const baseUrl = `${protocol}://${host}${core}&${queryString}`;
     const baseUrl = `${import.meta.env.VITE_SOLR_URL}&${queryString}`;
     const response = await fetch(baseUrl);
@@ -96,17 +89,15 @@ export async function solrSearch(query, queryFields) {
         // https://discovery1.dlib.nyu.edu/solr/open-square-metadata/select?q=dad&fl=title,subtitle,description,author,date,identifier,coverHref,thumbHref&hl=true&hl.fl=author,date,description,series_names,subtitle,title&hl.fragsize=500&hl.simple.pre=%3Cmark%3E&hl.simple.post=%3C/mark%3E&hl.snippets=1&qf=author^4%20date^1%20description^2%20series_names^3%20subtitle^4%20title^4&rows=1999&sort=score%20desc,title_sort%20asc&defType=edismax&indent=on&wt=json
         // TODO: what property to use for `coverHref`?
         // fl: "title,subtitle,description,author,date,identifier,coverHref,thumbHref",
-        fl: "title,subtitle,description,contributors,dateOpenAccess,openSquareId,id", // openSquareId and id are the same thing = ISBN
-        // TODO: figure out if highlighting is being trimmed at the viewer API level
+        fl: "title,subtitle,description,contributorsAsASentence,dateOpenAccess,openSquareId,id", // openSquareId and id are the same thing = ISBN
         hl: true,
         "hl.fl": getHlFlFromQueryFields(queryFields),
         "hl.fragsize": DEFAULT_HIGHLIGHT_FRAGMENT_SIZE,
         "hl.simple.pre": "<mark>",
         "hl.simple.post": "</mark>",
         "hl.snippets": 1,
-
         qf: getQfFromQueryFields(queryFields),
-        rows: 1999, // default is 10
+        rows: 1999, // for no pagination
         // sort: "score%20desc,title_sort%20asc",
     };
 
