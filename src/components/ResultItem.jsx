@@ -1,11 +1,9 @@
 import React from "react";
 import { PropTypes } from "prop-types";
 import { getThumbnailUrl } from "../utils/utils";
-import "./ResultItem.css";
 
 // individual result item
 // no need for state, iterated by parent component
-// TODO: use es6 destructuring for default props
 export function ResultItem({
     contributors,
     date,
@@ -25,7 +23,6 @@ export function ResultItem({
             name={title}
             className="book-summary-hold"
         >
-            {/* TODO: can we reduce containeritis and use article as the container */}
             <article className="book-summary container">
                 <div className="thumb" role="presentation">
                     <a
@@ -42,15 +39,12 @@ export function ResultItem({
                 </div>
                 <div className="meta">
                     <div className="book-title-group">
-                        {/* a tag not a react router item since we want to navigate to this page */}
                         <a href={`/books/${identifier}/`}>
                             <div
                                 className="book-title"
                                 // TODO: find a better solution that doesn't rely on dangerouslySetInnerHTML
                                 dangerouslySetInnerHTML={{ __html: title }}
                             ></div>
-
-                            {/* <div className="book-subtitle">{subtitle}</div> */}
                             <div
                                 className="book-subtitle"
                                 dangerouslySetInnerHTML={{ __html: subtitle }}
