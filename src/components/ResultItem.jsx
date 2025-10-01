@@ -1,7 +1,6 @@
 import React from "react";
 import { PropTypes } from "prop-types";
 import { getThumbnailUrl } from "../utils/utils";
-import "./ResultItem.css";
 
 // individual result item
 // no need for state, iterated by parent component
