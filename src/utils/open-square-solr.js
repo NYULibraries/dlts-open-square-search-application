@@ -89,7 +89,7 @@ export async function solrSearch(query, queryFields) {
         // https://discovery1.dlib.nyu.edu/solr/open-square-metadata/select?q=dad&fl=title,subtitle,description,author,date,identifier,coverHref,thumbHref&hl=true&hl.fl=author,date,description,series_names,subtitle,title&hl.fragsize=500&hl.simple.pre=%3Cmark%3E&hl.simple.post=%3C/mark%3E&hl.snippets=1&qf=author^4%20date^1%20description^2%20series_names^3%20subtitle^4%20title^4&rows=1999&sort=score%20desc,title_sort%20asc&defType=edismax&indent=on&wt=json
         // TODO: what property to use for `coverHref`?
         // fl: "title,subtitle,description,author,date,identifier,coverHref,thumbHref",
-        fl: "title,subtitle,description,contributorsAsASentence,dateOpenAccess,openSquareId,id", // openSquareId and id are the same thing = ISBN
+        fl: "title,subtitle,description,contributorsAsASentence,dateBook,openSquareId,id", // openSquareId and id are the same thing = ISBN
         hl: true,
         "hl.fl": getHlFlFromQueryFields(queryFields),
         "hl.fragsize": DEFAULT_HIGHLIGHT_FRAGMENT_SIZE,
