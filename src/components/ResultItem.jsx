@@ -1,9 +1,6 @@
 import React from "react";
 import { PropTypes } from "prop-types";
-import {
-    getThumbnailUrl,
-    sortContributorsIntoRoleBuckets,
-} from "../utils/utils";
+import { getThumbnailUrl } from "../utils/utils";
 import "./ResultItem.css";
 
 // individual result item
@@ -17,11 +14,12 @@ export function ResultItem({
     subtitle,
     title,
     // TODO: add description restriction at the component level
+    // Ellipsis character -- on Macos use key combination `Option + ;`
+    // ellipsis: PropTypes.String,
     maxDescriptionLength = 500,
 }) {
     return (
         <div
-            // container? or is article the container?
             id={identifier}
             key={identifier}
             name={title}
@@ -59,20 +57,16 @@ export function ResultItem({
                             ></div>
                         </a>
                     </div>
-                    {sortContributorsIntoRoleBuckets(contributors).map(
-                        (contributorSentenceByType, index) => (
-                            <div className="author-group" key={index}>
-                                <span className="rolename">
-                                    {contributorSentenceByType}
-                                </span>
-                            </div>
-                        )
-                    )}
+                    <div className="author-group">
+                        <span
+                            className="rolename"
+                            dangerouslySetInnerHTML={{ __html: contributors }}
+                        ></span>
+                    </div>
                     <div className="pubdate">
                         <span>Published: </span>
                         <span>{date.substring(0, 4)}</span>
                     </div>
-                    {/* <div className="description meta">{description}</div> */}
                     <div
                         className="description meta"
                         dangerouslySetInnerHTML={{ __html: description }}
@@ -83,12 +77,7 @@ export function ResultItem({
     );
 }
 
-// TODO: proptypes deprecated in react 19, use typescript
-// https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-proptypes-and-defaultprops
 ResultItem.propTypes = {
-    // contributors is a stringified json object that needs parsing
-    // contributors: PropTypes.array,
-    // skipping viewer api and going direct to solr
     contributors: PropTypes.string,
     date: PropTypes.string,
     identifier: PropTypes.string,
