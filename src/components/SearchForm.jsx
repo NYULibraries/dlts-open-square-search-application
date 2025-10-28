@@ -38,8 +38,8 @@ export function SearchForm() {
                 highlight: true,
                 weight: 4,
             },
-            // date -> dateOpenAccess
-            dateOpenAccess: {
+            // date -> dateOpenAccess -> dateBook
+            dateBook: {
                 highlight: true,
                 weight: 1,
             },
