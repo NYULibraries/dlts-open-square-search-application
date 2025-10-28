@@ -1,3 +1,5 @@
+import { truncateToSpace } from "../utils/open-square-solr";
+
 /**
  * function that truncates text to fit for the ResultItem component
  * used in the getDescription function
@@ -59,6 +61,7 @@ export function getThumbnailUrl(isbn) {
  * if there is none, it displays the normally returned value by solr
  * when rendering the results from solr we will sometimes receive highlights
  * this function helps choose the highlights over the original field values when present.
+ * additionally, if it's the description, trim it down and surround with ellipsis
  * @param {*} highlights - the whole highlight object returned by solr
  * @param {*} identifier - the id used by the book in solr
  * @param {*} field - which field to find highlights for
@@ -69,16 +72,24 @@ export function getFieldValueOrHighlightedFieldValue(
     result,
     field
 ) {
+    const maxDescriptionLength = 500;
     const identifier = result.id;
     if (highlights[identifier] && highlights[identifier][field]) {
         // We only want the first snippet
+        if (field == "description") {
+            return "..." + highlights[identifier][field][0] + "...";
+        }
         return highlights[identifier][field][0];
     } else {
         const fieldValue = result[field];
         if (Array.isArray(fieldValue)) {
-            return fieldValue[0];
+            return field == "description"
+                ? truncateToSpace(fieldValue[0], maxDescriptionLength) + "..."
+                : fieldValue[0];
         } else {
-            return fieldValue;
+            return field == "description"
+                ? truncateToSpace(fieldValue, maxDescriptionLength) + "..."
+                : fieldValue;
         }
     }
 }

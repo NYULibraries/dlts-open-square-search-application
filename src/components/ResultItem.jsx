@@ -11,10 +11,6 @@ export function ResultItem({
     identifier,
     subtitle,
     title,
-    // TODO: add description restriction at the component level
-    // Ellipsis character -- on Macos use key combination `Option + ;`
-    // ellipsis: PropTypes.String,
-    maxDescriptionLength = 500,
 }) {
     return (
         <div

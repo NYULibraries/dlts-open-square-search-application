@@ -124,6 +124,23 @@ function getHlFlFromQueryFields(queryFields) {
 }
 
 /**
+ * function that trims the description from solr using the max description length
+ * @param {string} text - the description to truncate
+ * @param {num} maxlength - how long to trim
+ * @returns {string} trimmed description to last nearest whitespace
+ */
+export function truncateToSpace(text, maxLength) {
+    if (!text) {
+        return text;
+    }
+
+    if (text.length <= maxLength) {
+        return text;
+    }
+    return text.substring(0, text.lastIndexOf(" ", maxLength));
+}
+
+/**
  * creates url-usable string of queryfields^weight
  * @param {object} queryFields - contains the queryFields with their properties
  * @returns string
