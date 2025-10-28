@@ -1,51 +1,3 @@
-import { truncateToSpace } from "../utils/open-square-solr";
-
-/**
- * function that truncates text to fit for the ResultItem component
- * used in the getDescription function
- * @param {String} text - to be truncated
- * @param {Number} maxLength - how long the truncatin will be
- * @returns String
- */
-export function truncate(text, maxLength) {
-    if (!text) {
-        return text;
-    }
-
-    if (text.length <= maxLength) {
-        return text;
-    }
-
-    return text.substr(0, text.lastIndexOf(" ", maxLength)) + this.ellipsis;
-}
-
-/**
- * function that retrieves a summary of description that Solr returns
- * in the form of highlights. Checks if Solr provided highlights and returns them.
- * @param {string} result - the whole data of each publication
- * @param {number} maxDescriptionLength - how long we want the truncated description to be
- * @returns {string}
- */
-export function getDescription(result, maxDescriptionLength = 500) {
-    const identifier = result.identifier;
-    // how can get scope access to highlights in this function as a util
-    if (
-        result.highlights[identifier] &&
-        result.highlights[identifier].description
-    ) {
-        // We only want the first snippet
-        // Ellipsis character -- on Macos use key combination `Option + ;`
-        // ellipsis={"…"}
-        return (
-            this.ellipsis +
-            this.highlights[identifier].description[0] +
-            this.ellipsis
-        );
-    } else {
-        return truncate(result.description, maxDescriptionLength);
-    }
-}
-
 /**
  * builds the URL for thumbnails in the ResultItem
  * @param {string} isbn - id of the book
@@ -53,6 +5,23 @@ export function getDescription(result, maxDescriptionLength = 500) {
  */
 export function getThumbnailUrl(isbn) {
     return `https://nyu-opensquare-us.imgix.net/covers/${isbn}.jpg?auto=format&w=145`;
+}
+
+/**
+ * function that trims the description from solr using the max description length
+ * @param {string} text - the description to truncate
+ * @param {num} maxlength - how long to trim
+ * @returns {string} trimmed description to last nearest whitespace
+ */
+function truncateToSpace(text, maxLength) {
+    if (!text) {
+        return text;
+    }
+
+    if (text.length <= maxLength) {
+        return text;
+    }
+    return text.substring(0, text.lastIndexOf(" ", maxLength));
 }
 
 /**
