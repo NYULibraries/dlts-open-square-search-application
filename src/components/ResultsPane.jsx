@@ -59,9 +59,10 @@ export function ResultsPane({
                     )}
                     {/* search failure scenario */}
                     {searched && error && <Error />}
+                    {/* success scenario */}
+                    {searched && publications.length > 0 && listItems}
                 </div>
             </div>
-            {searched && publications.length > 0 && listItems}
         </>
     );
 }
