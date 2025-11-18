@@ -7,7 +7,9 @@
 // @forward "mixins.scss";
 // @forward "controls.scss";
 
-@import "hugo_variables";
+// use named import at the source file instead of this until you have locked down
+// the list of modules needed, and then later use the index sourcing style
+
 // @import "initial-variables.scss";
 // @import "functions.scss";
 // @import "derived-variables.scss";

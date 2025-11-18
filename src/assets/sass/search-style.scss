@@ -1,4 +1,39 @@
-@charset "utf-8";
+// no need for chartset directive, utf8 is default
+// @charset "utf-8";
 
+// previous setting:
+// - bulma
+// - scss
+// - some styles from the hugo website
+
+// current plan:
+// 1. merge both css and get something up and running
+// 2. clear out styles that are unique to hugo and cleanup styles for the search app
+// 3. make it easy to udpate the styles in case hugo site visuals change
+// 4. TODO: transform _all imports in favor of the new standard of _index.scss https://sass-lang.com/documentation/at-rules/use/#index-files
+
+// most of the styles needed for this app are in the hug site https://github.com/NYULibraries/dlts-open-square
+// the last update in image was done in branch `NYUP-1091-branding branch`
+// importing first to give the other set of assets access to the variables
+@import "../../assets-hugo/sass/style.scss";
+
+
+
+// styles in the previous viewjs app have little to do with the current way it displays
+// will have to check which things are relevant
+// @import "utilities";
+// @import "base";
+// @import "base/fonts";
+// @import "base/sanitize";
+// @import "elements/_all";
+// @import "components/_all"; // no components used for this search application, might need to delete later
+// @import "grid/_all"; // not needed, but useful for later maybe?
+// @import "layout/_all";
+// @import "layout/book-meta";
+
+// 2. import all things
+// styles for the input bar are here vv
 @import "osq";
 @import "osqsearch";
+
+
