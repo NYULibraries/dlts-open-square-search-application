@@ -11,9 +11,9 @@
     "preview": "vite preview",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "test": "vitest",
-    "deploy-dev": "aws s3 rm s3://dlts-open-square-search-application-dev/search --recursive && aws s3 sync dist/ s3://dlts-open-square-search-application-dev/search --exclude 'books/*' --exclude 'css/*' --exclude 'fonts/*' --exclude 'images/*' --exclude 'open-square-reader/*'",
-    "deploy-stage": "aws s3 rm s3://dlts-open-square-search-application-stage/search --recursive && aws s3 sync dist/ s3://dlts-open-square-search-application-stage/search --exclude 'books/*' --exclude 'css/*' --exclude 'fonts/*' --exclude 'images/*' --exclude 'open-square-reader/*'",
-    "deploy": "aws s3 rm s3://dlts-open-square-search-application/search --recursive && aws s3 sync dist/ s3://dlts-open-square-search-application/search --exclude 'books/*' --exclude 'css/*' --exclude 'fonts/*' --exclude 'images/*' --exclude 'open-square-reader/*'",
+    "deploy-dev": "aws s3 rm s3://dlts-open-square-search-application-dev/search --recursive && aws s3 sync dist/ s3://dlts-open-square-search-application-dev/search --exclude 'books/*' --exclude 'css/*' --exclude 'open-square-reader/*'",
+    "deploy-stage": "aws s3 rm s3://dlts-open-square-search-application-stage/search --recursive && aws s3 sync dist/ s3://dlts-open-square-search-application-stage/search --exclude 'books/*' --exclude 'css/*' --exclude 'open-square-reader/*'",
+    "deploy": "aws s3 rm s3://dlts-open-square-search-application/search --recursive && aws s3 sync dist/ s3://dlts-open-square-search-application/search --exclude 'books/*' --exclude 'css/*' --exclude 'open-square-reader/*'",
     "cache-inv-dev":"aws cloudfront create-invalidation --distribution-id EL7QDX6Z1W41V --paths '/search/*'",
     "cache-inv-stage":"aws cloudfront create-invalidation --distribution-id E1KNZQHSUHQPYG --paths '/search/*'",
     "cache-inv":"aws cloudfront create-invalidation --distribution-id EA76G2VXY1H42 --paths '/search/*'"
