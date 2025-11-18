@@ -1,0 +1,51 @@
+$nav-link-color: $nyu-purple;
+
+// note: this affects header and footers
+.nav-links {
+  ul {
+    margin: 0 auto;
+    // display: inline-block; // removed in favor of using flexbox
+    padding-left: 0;
+
+    li {
+    //   display: inline-block; // removed in favor of using flexbox
+      color: $nav-link-color;
+    }
+
+    li:not(:first-child)::before {
+      content: '\2022';
+      padding: .4em;
+    }
+  }
+
+  a:link,
+  a:visited {
+    color: $nav-link-color;
+    letter-spacing: .2px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+}
+
+// vvv created by jna1
+
+.page-header {
+    .nav-links {
+        ul {
+            display: flex;
+            justify-content: center;
+        }
+    }
+}
+
+.page-footer {
+    .nav-links {
+        ul {
+            display: flex;
+            justify-content: center;
+        }
+    }
+}
+
+// created by jna1 (end)

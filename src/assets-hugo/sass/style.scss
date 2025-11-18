@@ -1,0 +1,217 @@
+// from the hugo repository
+// NYUP-1091-branding branch
+// themes/dlts-opensquare/assets/style.scss
+
+// TODO: should there be a variables file?
+// $nyuteal: #008996;
+// $nyu-purple: #57068c;
+// $nyugray1: #4a4f55;
+// $nyugray2: #939a90;
+// $lightgray: #7f499e7d;
+
+$nyuteal: #008996;
+$nyu-purple: #57068c;
+$nyugray1: #4a4f55;
+$nyugray2: #939a90;
+$lightgray: #cdc4e1;
+$textcolora: #040404;
+$textcolorb: rgba(26, 28, 29, .65);
+$linkcolora: #0c186e;
+$visitedlinkcolora: #3c7aae;
+$linkcolor: #010101;
+
+// ==========================================================================
+// Base theme
+// ========================================================================== */
+// TODO: should there be a variables file?
+$selection-color-bg: #00e9ff54;
+$selection-color-text: #000000;
+$focus-color: #00e9ff54;
+
+@import "partials/sanitize"; // sanitize necessary for looks to match, copied into the /assets/base/
+@import "./mixins/all";
+@import "partials/focus-states";
+// ==========================================================================
+// Deque
+
+// ========================================================================== */
+
+// dequeue styles are not needed in the search application
+// TODO: remove dequeu styles from the react application
+// @import "./deque-select-style";
+
+// ==========================================================================
+// Google Material Design Styles for layout grid
+// ========================================================================== */
+$mdc-layout-grid-columns: (
+  desktop: 12,
+  tablet: 12,
+  phone: 6
+);
+$mdc-layout-grid-breakpoints: (
+  desktop: 840px,
+  tablet: 600px,
+  phone: 0
+);
+$mdc-layout-grid-default-gutter: (
+  desktop: 24px,
+  tablet: 16px,
+  phone: 16px
+);
+
+@import "google-material-design/mdc-layout-grid";
+
+// ==========================================================================
+// Begin DLTS styles
+// ========================================================================== */
+
+$primary-color: $nyu-purple;
+$primary-color-muted: $lightgray;
+
+$textcolora: #040404;
+$textcolorb: rgba(26, 28, 29, .65);
+$linkcolora: #0c186e;
+$visitedlinkcolora: #3c7aae;
+$linkcolor: #010101;
+$visitedlinkcolor: $textcolora;
+$linkhovercolor: $primary-color;
+
+$section-title-color: #e00022;
+$breakpoint: 600px;
+$viewportpadding-mobile: 22px;
+$viewportpadding-tablet: 30px;
+$viewportpadding-desktop: 50px;
+
+$background-color-main: #ffffff;
+$background-color-navbar: #ffffff;
+$font-family-general: "nyuperstare", Verdana, sans-serif;
+$font-family-headers: "nyuperstarecondensed", Verdana, sans-serif;
+$font-family-headers-bold: "nyuperstare", Verdana, sans-serif;
+$font-family-body: "nyuperstare", Verdana, sans-serif;
+
+$skipnav-background: #ffffff;
+$skipnav-border: $primary-color;
+
+$callout-text-color: #ffffff;
+
+
+// TODO: should this be in mixins?
+@mixin body-text {
+  font-size: .9rem;
+  line-height: 1.5;
+
+}
+
+// @import "partials/aboutpages";
+// @import "partials/deque-select-theming";
+@import "partials/fonts";
+@import "partials/accessibility";
+@import "partials/typography";
+// @import "partials/tags";
+// @import "partials/series";
+// @import "partials/social";
+// TODO: migrate to assets
+@import "partials/navbar";
+@import "partials/homepage-only"; // holds some elements of whole page shift
+// done: migrated to `sr/assets/layout/_book-meta"
+@import "partials/book-meta"; // holds the individual book info layout
+// DONE: migrated to assets
+@import "partials/nav-links";
+@import "partials/readingpage";
+// DONE: copied and required in the regular assets allocation
+@import "partials/searchpage";
+
+body {
+  background-color: $background-color-main;
+  font-size: 16px;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 15px;
+}
+
+.hold-all {
+  margin: 0 auto;
+  max-width: 1400px;
+  padding: 0 $viewportpadding-mobile;
+  @include mdc-layout-grid-media-query_("desktop") {
+    padding: 0 $viewportpadding-desktop;
+  }
+  @include mdc-layout-grid-media-query_("tablet") {
+    padding: 0 $viewportpadding-tablet;
+  }
+}
+
+.page-header {
+  border-bottom: 2px solid $lightgray;
+  padding: 20px 0;
+  // what is this one for?
+  position: relative;
+}
+
+.page-footer {
+  border-top: 2px solid $lightgray;
+  padding: 35px 0;
+}
+
+.contain-main,
+.page-footer,
+.page-header {
+  max-width: 1400px;
+  margin: 0;
+}
+
+.contain-main,
+.page-footer {
+  background-color: $background-color-main;
+}
+
+.page-footer{
+    background: url("/images/skyline.png");
+    padding-bottom: 200px;
+    background-size: contain;
+    padding-bottom: 200px;
+    background-repeat: repeat-x;
+    background-position: bottom left;
+    background-size: auto 90px;
+    @include mdc-layout-grid-media-query_("desktop") {
+        background-size: auto 138px;
+        background-position: bottom right;
+    }
+
+}
+// @media (min-width: 840px) {
+//     .page-footer {
+//         background-size: auto 138px;
+//         background-position: bottom right;
+//     }
+// }
+
+main {
+  padding: $viewportpadding-mobile 0;
+  @include body-text;
+}
+
+@media only screen and (min-width: $breakpoint) {
+  main {
+    padding: $viewportpadding-desktop 0 100px;
+  }
+}
+
+// TODO: this rule should live in nav-links
+header li,
+header nav {
+    // jna1: after testing I noted this rule is not necessary
+//   display: inline-block;
+}
+
+.item-count {
+  float:right;
+  font-size: 1.1rem;
+  margin-top: .7rem;
+}
+
+main .main-header {
+  margin-bottom: .5rem;
+}
