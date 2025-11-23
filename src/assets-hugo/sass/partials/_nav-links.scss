@@ -3,7 +3,7 @@ $nav-link-color: $nyu-purple;
 // note: this affects header and footers
 .nav-links {
   ul {
-    margin: 0 auto;
+    // margin: 0 auto;
     // display: inline-block; // removed in favor of using flexbox
     padding-left: 0;
 
@@ -35,6 +35,11 @@ $nav-link-color: $nyu-purple;
         ul {
             display: flex;
             justify-content: center;
+            flex-wrap: wrap;
+            word-break: normal;
+        }
+        a{
+            word-break: normal;
         }
     }
 }
@@ -44,6 +49,11 @@ $nav-link-color: $nyu-purple;
         ul {
             display: flex;
             justify-content: center;
+            flex-wrap: wrap;
+            word-break: normal;
+        }
+        a{
+            word-break: normal;
         }
     }
 }
