@@ -37,6 +37,8 @@ $nav-link-color: $nyu-purple;
             justify-content: center;
             flex-wrap: wrap;
             word-break: normal;
+            // there's a user-agent stylesheet property that was giving this <ul> a margin, so I had to overwrite to match stylings
+            margin: 0;
         }
         a{
             word-break: normal;
@@ -51,6 +53,8 @@ $nav-link-color: $nyu-purple;
             justify-content: center;
             flex-wrap: wrap;
             word-break: normal;
+            // there's a user-agent stylesheet property that was giving this <ul> a margin, so I had to overwrite to match stylings
+            margin: 0;
         }
         a{
             word-break: normal;
