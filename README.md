@@ -141,6 +141,19 @@ npm run build
 npm run preview
 ```
 
+## Backup and preserve a deployed site
+
+Pre-requisites
+
+- aws cli
+
+When deploying new changes to an environment you might need to backup the content in that S3 bucket.
+
+```
+npm run backup-prod
+> will copy into a `./backups` directory
+```
+
 ## Deployment
 
 Pre-requisites (not in devcontainer, needed on your development machine)

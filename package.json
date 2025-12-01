@@ -11,6 +11,7 @@
     "preview": "vite preview",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "test": "vitest",
+    "backup-prod": "aws s3 sync s3://dlts-open-square-search-application/search ./backups",
     "deploy-dev": "aws s3 rm s3://dlts-open-square-search-application-dev/search --recursive && aws s3 sync dist/ s3://dlts-open-square-search-application-dev/search --exclude 'books/*' --exclude 'css/*' --exclude 'open-square-reader/*'",
     "deploy-stage": "aws s3 rm s3://dlts-open-square-search-application-stage/search --recursive && aws s3 sync dist/ s3://dlts-open-square-search-application-stage/search --exclude 'books/*' --exclude 'css/*' --exclude 'open-square-reader/*'",
     "deploy": "aws s3 rm s3://dlts-open-square-search-application/search --recursive && aws s3 sync dist/ s3://dlts-open-square-search-application/search --exclude 'books/*' --exclude 'css/*' --exclude 'open-square-reader/*'",
