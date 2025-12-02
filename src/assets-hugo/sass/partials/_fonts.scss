@@ -15,9 +15,17 @@
 // these fonts assume that they live in the public directory and that there is no hashes
 // hashes are important since if you update stuff they will have a new hash and that will a new asset that will not have cache issues
 
+// @font-face {
+//   font-family: 'vistasansnarot-light';
+// //   src: url("../../fonts/vistasansnarot-light-webfont.eot");
+//   src: url("/fonts/vistasansnarot-light-webfont.eot?#iefix") format('embedded-opentype'), url("/fonts/vistasansnarot-light-webfont.woff2") format('woff2'), url("/fonts/vistasansnarot-light-webfont.woff") format('woff');
+//   font-weight: normal;
+//   font-style: normal;
+
+// }
 @font-face {
   font-family: 'nyuperstare';
-  src: url("@/assets/fonts/NYUPerstare-VF.ttf");
+  src: url("@/assets-hugo/fonts/NYUPerstare-VF.ttf"); // using alias in viteconfig
 }
 
 // @font-face {
@@ -30,7 +38,7 @@
 
 @font-face {
   font-family: 'nyuperstarecondensed';
-  src: url("@/assets/fonts/NYUPerstareCondensed-VF.ttf");
+  src: url("@/assets-hugo/fonts/NYUPerstareCondensed-VF.ttf");
 //   src: url("/search/fonts/NYUPerstare/NYUPerstareCondensed-VF.ttf");
   // font-weight: normal;
   // font-style: normal;
