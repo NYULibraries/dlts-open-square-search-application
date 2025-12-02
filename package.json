@@ -1,8 +1,9 @@
 {
-  "name": "vite-test-project-react",
+  "name": "open-square-search-application",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.0",
   "type": "module",
+  "author": "Taka <jna1@nyu.edu>",
   "scripts": {
     "dev": "vite",
     "build-dev": "NODE_ENV=development vite build --mode development",
