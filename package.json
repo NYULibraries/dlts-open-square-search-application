@@ -1,119 +1,40 @@
 {
-    "name": "open-square-search-application",
-    "version": "1.1.0",
-    "description": "Vue.js search SPA for the DLTS Open Square website.",
-    "author": "David <da70@nyu.edu>",
-    "private": true,
-    "scripts": {
-        "serve": "vue-cli-service serve",
-        "build:dev": "vue-cli-service build --mode dev",
-        "build:stage": "vue-cli-service build --mode stage",
-        "build:prod": "vue-cli-service build --mode prod",
-        "cache:invalidate:dev": "aws cloudfront create-invalidation --distribution-id EL7QDX6Z1W41V --paths '/search/*'",
-        "cache:invalidate:stage": "aws cloudfront create-invalidation --distribution-id E1KNZQHSUHQPYG --paths '/search/*'",
-        "cache:invalidate:prod": "aws cloudfront create-invalidation --distribution-id EA76G2VXY1H42 --paths '/search/*'",
-        "deploy:dev": "yarn run build:dev; yarn run sync:dev; yarn cache:invalidate:dev; sleep 30; yarn test:browser:dev",
-        "deploy:stage": "yarn run build:stage; yarn run sync:stage; yarn cache:invalidate:stage; sleep 30; yarn test:browser:stage",
-        "deploy:prod": "yarn run build:prod; yarn run sync:prod; yarn cache:invalidate:prod; sleep 30; yarn test:browser:prod",
-        "lint": "vue-cli-service lint",
-        "sync:dev": "aws s3 rm s3://dlts-open-square-search-application-dev/search --recursive && aws s3 sync dist/ s3://dlts-open-square-search-application-dev/search --exclude 'books/*' --exclude 'css/*' --exclude 'fonts/*' --exclude 'images/*' --exclude 'open-square-reader/*'",
-        "sync:stage": "aws s3 rm s3://dlts-open-square-search-application-stage/search --recursive && aws s3 sync dist/ s3://dlts-open-square-search-application-stage/search --exclude 'books/*' --exclude 'css/*' --exclude 'fonts/*' --exclude 'images/*' --exclude 'open-square-reader/*'",
-        "sync:prod": "aws s3 rm s3://dlts-open-square-search-application/search --recursive && aws s3 sync dist/ s3://dlts-open-square-search-application/search --exclude 'books/*' --exclude 'css/*' --exclude 'fonts/*' --exclude 'images/*' --exclude 'open-square-reader/*'",
-        "test": "yarn run lint && yarn run test:unit && yarn run test:browser:local",
-        "test:browser:local": "node_modules/.bin/wdio tests/browser/conf/wdio.local.conf.js",
-        "test:browser:local:chrome": "node_modules/.bin/wdio tests/browser/conf/wdio.local.chrome.conf.js",
-        "test:browser:local:chrome:debug": "node_modules/.bin/wdio tests/browser/conf/wdio.local.chrome.debug.conf.js",
-        "test:browser:local:firefox": "node_modules/.bin/wdio tests/browser/conf/wdio.local.firefox.conf.js",
-        "test:browser:local:firefox:debug": "node_modules/.bin/wdio tests/browser/conf/wdio.local.firefox.debug.conf.js",
-        "test:browser:dev": "node_modules/.bin/wdio tests/browser/conf/wdio.dev.conf.js",
-        "test:browser:stage": "node_modules/.bin/wdio tests/browser/conf/wdio.stage.conf.js",
-        "test:browser:prod": "node_modules/.bin/wdio tests/browser/conf/wdio.prod.conf.js",
-        "test:browser:update:fixtures": "UPDATE_SOLR_RESPONSES_SOLR_SERVER_URL=http://discovery1.dlib.nyu.edu/solr/open-square-metadata/select node_modules/.bin/wdio tests/browser/conf/wdio.local.chrome.conf.js --suite search-results",
-        "test:browser:update:golden": "UPDATE_GOLDEN_FILES=1 node_modules/.bin/wdio tests/browser/conf/wdio.local.chrome.conf.js --suite search-results",
-        "test:unit": "vue-cli-service test:unit"
-    },
-    "dependencies": {
-        "font-awesome": "4.7.0",
-        "is-plain-object": "^3.0.0",
-        "vue": "^2.6.10",
-        "vuex": "^3.1.1"
-    },
-    "devDependencies": {
-        "@babel/cli": "^7.4.4",
-        "@babel/core": "^7.4.5",
-        "@babel/preset-env": "^7.4.5",
-        "@babel/register": "^7.4.4",
-        "@vue/cli-plugin-babel": "^3.8.0",
-        "@vue/cli-plugin-eslint": "^3.8.0",
-        "@vue/cli-plugin-unit-jest": "^3.9.0",
-        "@vue/cli-service": "^3.8.3",
-        "@vue/eslint-config-standard": "^4.0.0",
-        "@vue/test-utils": "^1.0.0-beta.29",
-        "@wdio/cli": "^7.7.3",
-        "@wdio/local-runner": "^7.7.3",
-        "@wdio/mocha-framework": "^7.7.3",
-        "@wdio/selenium-standalone-service": "^7.7.3",
-        "@wdio/spec-reporter": "^7.7.3",
-        "@wdio/sync": "^7.7.3",
-        "babel-core": "7.0.0-bridge.0",
-        "babel-eslint": "^10.0.1",
-        "babel-jest": "^24.8.0",
-        "chai": "^4.1.2",
-        "command-exists": "^1.2.7",
-        "dlts-solr-fake": "https://github.com/nyulibraries/dlts-solr-fake#v0.2.0",
-        "eslint": "^5.16.0",
-        "eslint-plugin-jest": "^22.13.6",
-        "eslint-plugin-vue": "^5.0.0-0",
-        "jest": "^24.8.0",
-        "jest-serializer-vue": "^2.0.2",
-        "jest-transform-stub": "^2.0.0",
-        "jest-watch-typeahead": "^0.3.1",
-        "json-stable-stringify": "^1.0.1",
-        "lodash.clonedeep": "^4.5.0",
-        "lodash.merge": "^4.6.2",
-        "lodash.mergewith": "^4.6.2",
-        "node-sass": "^4.12.0",
-        "rimraf": "^2.6.2",
-        "sass-loader": "^7.0.1",
-        "vue-jest": "^3.0.4",
-        "vue-template-compiler": "^2.6.10",
-        "webdriverio": "^7.7.3"
-    },
-    "engines": {
-        "node": ">= 14.0.0",
-        "npm": ">= 7.0.0"
-    },
-    "jest": {
-        "moduleFileExtensions": [
-            "js",
-            "jsx",
-            "json",
-            "vue"
-        ],
-        "moduleNameMapper": {
-            "^@/(.*)$": "<rootDir>/src/$1"
-        },
-        "notify": true,
-        "notifyMode": "always",
-        "snapshotSerializers": [
-            "jest-serializer-vue"
-        ],
-        "testMatch": [
-            "**/tests/unit/**/*.test.(js|jsx|ts|tsx)"
-        ],
-        "testURL": "http://opensquare-local.nyupress.org/",
-        "transform": {
-            "^.+\\.vue$": "vue-jest",
-            ".+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
-            "^.+\\.jsx?$": "babel-jest"
-        },
-        "transformIgnorePatterns": [
-            "/node_modules/"
-        ],
-        "watchPlugins": [
-            "jest-watch-typeahead/filename",
-            "jest-watch-typeahead/testname"
-        ],
-        "verbose": true
-    }
+  "name": "open-square-search-application",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "author": "Taka <jna1@nyu.edu>",
+  "scripts": {
+    "dev": "vite",
+    "build-dev": "NODE_ENV=development vite build --mode development",
+    "build-stage": "vite build --mode stage",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "test": "vitest",
+    "backup-prod": "aws s3 sync s3://dlts-open-square-search-application/search ./backups",
+    "deploy-dev": "aws s3 rm s3://dlts-open-square-search-application-dev/search --recursive && aws s3 sync dist/ s3://dlts-open-square-search-application-dev/search --exclude 'books/*' --exclude 'css/*' --exclude 'open-square-reader/*'",
+    "deploy-stage": "aws s3 rm s3://dlts-open-square-search-application-stage/search --recursive && aws s3 sync dist/ s3://dlts-open-square-search-application-stage/search --exclude 'books/*' --exclude 'css/*' --exclude 'open-square-reader/*'",
+    "deploy": "aws s3 rm s3://dlts-open-square-search-application/search --recursive && aws s3 sync dist/ s3://dlts-open-square-search-application/search --exclude 'books/*' --exclude 'css/*' --exclude 'open-square-reader/*'",
+    "cache-inv-dev":"aws cloudfront create-invalidation --distribution-id EL7QDX6Z1W41V --paths '/search/*'",
+    "cache-inv-stage":"aws cloudfront create-invalidation --distribution-id E1KNZQHSUHQPYG --paths '/search/*'",
+    "cache-inv":"aws cloudfront create-invalidation --distribution-id EA76G2VXY1H42 --paths '/search/*'"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sass": "^1.79.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "vite": "^5.2.0",
+    "vitest": "^2.1.3"
+  }
 }
