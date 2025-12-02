@@ -15,46 +15,23 @@
 // these fonts assume that they live in the public directory and that there is no hashes
 // hashes are important since if you update stuff they will have a new hash and that will a new asset that will not have cache issues
 
-// @font-face {
-//   font-family: 'vistasansnarot-light';
-// //   src: url("../../fonts/vistasansnarot-light-webfont.eot");
-//   src: url("/fonts/vistasansnarot-light-webfont.eot?#iefix") format('embedded-opentype'), url("/fonts/vistasansnarot-light-webfont.woff2") format('woff2'), url("/fonts/vistasansnarot-light-webfont.woff") format('woff');
-//   font-weight: normal;
-//   font-style: normal;
-
-// }
 @font-face {
   font-family: 'nyuperstare';
-//   src: url("../../fonts/NYUPerstare-VF.ttf");
-//   src: url("@/assets-hugo/fonts/NYUPerstare-VF.ttf");
-// why is VITE not grabbing the fonts correcctluy? this is the URL needed for the final font location
-  src: url("/search/fonts/NYUPerstare-VF.ttf"); // using /public directory fonts
+  src: url("@/assets/fonts/NYUPerstare-VF.ttf");
 }
 
-@font-face {
-  font-family: 'nyuperstareital';
-//   src: url("../../fonts/NYUPerstare/nyuperstareital-webfont.eot");
-  src: url("/search/fonts/NYUPerstare/nyuperstareital-webfont.eot");
-//   src: url("../fonts/NYUPerstare/nyuperstareital-webfont.eot?#iefix") format('embedded-opentype'), url("../fonts/NYUPerstare/nyuperstareital-webfont.woff2") format('woff2'), url("../fonts/NYUPerstare/nyuperstareital-webfont.woff") format('woff');
-  // font-weight: normal;
-  // font-style: normal;
-
-}
+// @font-face {
+//   font-family: 'nyuperstareital';
+//   src: url("@/assets/fonts/NYUPerstare/nyuperstareital-webfont.eot");
+// //   src: url("../fonts/NYUPerstare/nyuperstareital-webfont.eot?#iefix") format('embedded-opentype'), url("../fonts/NYUPerstare/nyuperstareital-webfont.woff2") format('woff2'), url("../fonts/NYUPerstare/nyuperstareital-webfont.woff") format('woff');
+//   // font-weight: normal;
+//   // font-style: normal;
+// }
 
 @font-face {
   font-family: 'nyuperstarecondensed';
-//   src: url("../../fonts/NYUPerstare/NYUPerstareCondensed-VF.ttf");
-  src: url("/search/fonts/NYUPerstare/NYUPerstareCondensed-VF.ttf");
+  src: url("@/assets/fonts/NYUPerstareCondensed-VF.ttf");
+//   src: url("/search/fonts/NYUPerstare/NYUPerstareCondensed-VF.ttf");
   // font-weight: normal;
   // font-style: normal;
-
-}
-
-@font-face {
-  font-family: 'vistasansnarot-boldital';
-  src: url("/search/fonts/NYUPerstare/vistasansnarot-boldital-webfont.eot");
-//   src: url("../fonts/NYUPerstare/vistasansnarot-boldital-webfont.eot?#iefix") format('embedded-opentype'), url("../fonts/NYUPerstare/vistasansnarot-boldital-webfont.woff2") format('woff2'), url("../fonts/NYUPerstare/vistasansnarot-boldital-webfont.woff") format('woff');
-  font-weight: normal;
-  font-style: normal;
-
 }
