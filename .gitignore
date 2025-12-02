@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 /dist
+/backups
 
 # local env files
 .env.local
@@ -26,8 +27,8 @@ open-square-search-application.iml
 # using webpack-dev-server
 public/books
 public/css
-public/fonts
-public/images
+# public/fonts
+# public/images
 public/open-square-reader
 
 /tests/browser/errorShots/

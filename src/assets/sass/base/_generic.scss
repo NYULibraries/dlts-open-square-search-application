@@ -1,3 +1,7 @@
+// @use "../utilities/derived-variables" as *;
+// @use "../utilities/initial-variables" as *;
+// @use "../utilities";
+
 $body-background-color: #fff !default;
 $body-size: 16px !default;
 $body-rendering: optimizeLegibility !default;
@@ -121,6 +125,7 @@ strong {
 // Block
 
 pre {
+//   @include utilities.overflow-touch;
   @include overflow-touch;
 
   background-color: $pre-background;
