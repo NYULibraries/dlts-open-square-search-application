@@ -1,5 +1,15 @@
 @charset "utf-8";
+// look into the _index.scss file
 
-@import "minireset.scss";
-@import "generic.scss";
-@import "helpers.scss";
+// @forward "minireset.scss";
+// @forward "generic.scss";
+// @forward "helpers.scss";
+
+// using because we want the output of the CSS file to be included in the main compiled CSS bundle
+// forward is for things like variables and mixins while wanting to make those tools available tot he subsequent files that are imported in your main file
+
+// @import "minireset.scss";
+// @import "sanitize.scss";
+// @import "generic.scss";
+// @import "helpers.scss";
+// @import "fonts.scss";

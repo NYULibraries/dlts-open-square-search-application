@@ -28,7 +28,6 @@ export function ResultsPane({
             identifier={book.id}
             index={book.id + i}
             key={book.id + i}
-            maxDescriptionLength={500}
             subtitle={getFieldValueOrHighlightedFieldValue(
                 highlighting,
                 book,
@@ -60,9 +59,10 @@ export function ResultsPane({
                     )}
                     {/* search failure scenario */}
                     {searched && error && <Error />}
+                    {/* success scenario */}
+                    {searched && publications.length > 0 && listItems}
                 </div>
             </div>
-            {searched && publications.length > 0 && listItems}
         </>
     );
 }
