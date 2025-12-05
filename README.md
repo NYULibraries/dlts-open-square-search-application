@@ -63,18 +63,24 @@ TODO: review if gitops branch separation is really necessary and not a premature
     -   (uses `.env.development` to override locally create `.env.development.local`)
     -   create PR back into development
     -   deploy to development environment
-    -   hosted at: https://opensquare-dev.nyupress.org/
+    -   search hosted at: https://opensquare-dev.nyupress.org/
+    -   DLTS viewer api hosted at: https://stage-sites.dlib.nyu.edu/viewer/api/v1/search/
+    -   solr hosted at: https://devdiscovery.dlib.nyu.edu/solr/#/
 -   Staging (deployed)
     -   branch `staging` (uses `.env.stage`)
     -   create PRs from `development` branch as promotion of changes to Staging
     -   deploy to staging environment
-    -   hosted at: https://opensquare-stage.nyupress.org/
+    -   search hosted at: https://opensquare-stage.nyupress.org/
+    -   DLTS viewer api hosted at:
+    -   solr hosted at: https://stagediscovery.dlib.nyu.edu/solr/#/
 -   Production (deployed)
     -   branch `main` (uses `.env.production)
     -   create PRs from `staging` branch as promotion of changes to Production
     -   deploy to production environment
     -   deploys to discovery1
-    -   hosted at: https://opensquare.nyupress.org/
+    -   search hosted at: https://opensquare.nyupress.org/
+    -   DLTS viewer api hosted at:
+    -   solr hosted at: https://discovery.dlib.nyu.edu/solr/#/
 
 ## Project setup
 
@@ -125,7 +131,6 @@ npm run build
 
 ```
 # Uses environment variables from .env.dev
-# different than
 npm run build-dev
 
 # Uses environment variables from .env.stage
@@ -141,6 +146,19 @@ npm run build
 ```
 # to locally serve built artifact
 npm run preview
+```
+
+## Backup and preserve a deployed site
+
+Pre-requisites
+
+- aws cli
+
+When deploying new changes to an environment you might need to backup the content in that S3 bucket.
+
+```
+npm run backup-prod
+> will copy into a `./backups` directory
 ```
 
 ## Deployment

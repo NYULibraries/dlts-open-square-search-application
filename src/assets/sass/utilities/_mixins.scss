@@ -1,4 +1,4 @@
-@import "initial-variables";
+// @use "../utilities" as *;
 
 @mixin arrow($color) {
   border: 1px solid $color;
