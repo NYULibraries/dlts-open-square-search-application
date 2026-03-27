@@ -1,23 +1,30 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
-	"name": "Node.js & TypeScript",
+	"name": "Open Square Search Application",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-    // TODO: add AWS CLI tools to this dev container
-    // https://renatogolia.com/2020/10/12/working-with-aws-in-devcontainers/
     // implies the need for a dockerfile instead of pointing at an image
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+	"image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+    // uncomment this section if you want to bind mount your aws credentials
+	// "mounts": [
+	// 	"source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/home/vscode/.aws,type=bind,readonly"
+	// ]
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/devcontainers/features/node:1": {
-			"version": "20.15.0"
-		}
+			"version": "none" // setting node version from nvmrc in updateContentCommand
+		},
+        "ghcr.io/devcontainers/features/aws-cli:1": {}
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [
 		5173,
         4173
 	],
+    // Use 'updateContentCommand' to install dependencies before the UI connects
+	"updateContentCommand": "bash -i -c 'nvm install && nvm use && npm install'",
+
+	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -28,15 +35,10 @@
 			]
 		}
 	},
-	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "npm clean-install",
-    "runArgs": [
-        // comment this in for local development with solr running within docker compose
-        // "--network=opensquare_network",
-        "--name=vite_dev_container"
-    ]
-	// Configure tool-specific properties.
-	// "customizations": {},
+    // "runArgs": [
+    //     // comment this in for local development with solr running within docker compose
+    //     // "--network=opensquare_network",
+    // ]
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
 }
