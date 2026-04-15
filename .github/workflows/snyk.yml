@@ -1,0 +1,55 @@
+name: Snyk
+
+on:
+  pull_request:
+    branches:
+      - master
+      - develop
+      - staging
+      - main
+  push:
+    branches:
+      - master
+      - develop
+      - staging
+      - main
+
+jobs:
+  open-source-security:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup Snyk
+        if: ${{ env.SNYK_TOKEN != '' }}
+        uses: snyk/actions/setup@master
+
+      - name: Runtime dependency gate
+        if: ${{ env.SNYK_TOKEN != '' }}
+        run: snyk test --file=package.json --package-manager=npm --severity-threshold=high
+
+      - name: Dev dependency visibility
+        if: ${{ github.event_name == 'push' && env.SNYK_TOKEN != '' }}
+        continue-on-error: true
+        run: snyk test --file=package.json --package-manager=npm --dev --severity-threshold=high
+
+      - name: Monitor long-lived branches
+        if: ${{ github.event_name == 'push' && env.SNYK_TOKEN != '' }}
+        run: |
+          snyk monitor --file=package.json --package-manager=npm
+          snyk monitor --file=package.json --package-manager=npm --dev
