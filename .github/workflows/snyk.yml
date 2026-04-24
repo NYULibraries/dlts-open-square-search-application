@@ -19,15 +19,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    env:
-      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
 
       - name: Setup Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
         with:
           node-version: 20
           cache: npm
@@ -36,20 +34,24 @@ jobs:
         run: npm ci
 
       - name: Setup Snyk
-        if: ${{ env.SNYK_TOKEN != '' }}
-        uses: snyk/actions/setup@master
+        uses: snyk/actions/setup@9adf32b1121593767fc3c057af55b55db032dc04
 
       - name: Runtime dependency gate
-        if: ${{ env.SNYK_TOKEN != '' }}
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: snyk test --file=package.json --package-manager=npm --severity-threshold=high
 
       - name: Dev dependency visibility
-        if: ${{ github.event_name == 'push' && env.SNYK_TOKEN != '' }}
+        if: ${{ github.event_name == 'push' }}
         continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: snyk test --file=package.json --package-manager=npm --dev --severity-threshold=high
 
       - name: Monitor long-lived branches
-        if: ${{ github.event_name == 'push' && env.SNYK_TOKEN != '' }}
+        if: ${{ github.event_name == 'push' }}
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: |
           snyk monitor --file=package.json --package-manager=npm
           snyk monitor --file=package.json --package-manager=npm --dev
