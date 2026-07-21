@@ -2801,7 +2801,8 @@ ul {
 }
 
 .page-footer {
-  background: url("images/skyline.png");
+  // background: url("../../../public/images/skyline.png");
+  background: url("/images/skyline.png");
   background-size: contain;
   padding-bottom: 200px;
   background-repeat: repeat-x;
