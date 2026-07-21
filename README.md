@@ -172,16 +172,19 @@ Deploying this application requires the following actions
 ```
 # development environment
 npm run build-dev
+npm run preview
 npm run deploy-dev
 npm run cache-inv-dev
 
 # staging environment
 npm run build-stage
+npm run preview
 npm run deploy-stage
 npm run cache-inv-stage
 
 # production environment
 npm run build
+npm run preview
 npm run deploy
 npm run cache-inv
 ```
