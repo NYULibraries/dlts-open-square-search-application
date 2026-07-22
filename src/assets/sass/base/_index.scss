@@ -1,0 +1,8 @@
+@charset "utf-8";
+
+// @forward "minireset.scss"; // using sanitize instead from the hugo website
+// use @import when you want the css to end up in the final bundle
+@import "sanitize.scss";
+@import "fonts.scss";
+// @import "generic.scss";
+// @import "helpers.scss";
