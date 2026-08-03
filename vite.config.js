@@ -1,22 +1,33 @@
-import { defineConfig } from "vite";
-import path from "path";
+import { defineConfig, loadEnv } from 'vite';
+import path from 'path';
 
-export default defineConfig({
-    base: "/search/",
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+
+  return {
+    base: '/search/',
     server: {
-        port: 5173,
-        host: "127.0.0.1",
+      port: 5173,
+      host: '127.0.0.1',
+      // using proxy in local development to bypass CORS for now
+      proxy: {
+        '/solr': {
+          target: env.VITE_SOLR_TARGET,
+          changeOrigin: true,
+        },
+      },
     },
     css: {
-        preprocessorOptions: {
-            scss: {
-                quietDeps: true,
-            },
+      preprocessorOptions: {
+        scss: {
+          quietDeps: true,
         },
+      },
     },
     resolve: {
-        alias: {
-            "@": path.resolve(__dirname, "./src"),
-        },
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+      },
     },
+  };
 });
