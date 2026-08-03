@@ -11,55 +11,55 @@ const DEFAULT_HIGHLIGHT_FRAGMENT_SIZE = 500;
  * @returns Promise of json data from solr query
  */
 async function doFetch(params) {
-    // Shouldn't ever have null or undefined params, but test and remove just
-    // in case, otherwise we end up with param=null or param=undefined.
-    Object.keys(params).forEach((key) => {
-        if (params[key] === null || params[key] === undefined) {
-            delete params[key];
-        }
-    });
-    params = Object.assign(params, {
-        // `q` should work for edismax and lucene (standard)
-        // `query` is used for DLTS viewer API for some reason
-        // Avoid `q : undefined` if q was deleted above or never present
-        // q: params.q !== undefined ? encodeURIComponent(params.q) : "",
-        defType: "edismax",
-        indent: "on",
-        wt: "json",
-    });
-
-    const queryStringParams = [];
-    Object.keys(params).forEach((key) => {
-        const paramValue = params[key];
-
-        // Some params like fq can be specified multiple times
-        if (Array.isArray(paramValue)) {
-            paramValue.forEach((value) => {
-                queryStringParams.push(key + "=" + value);
-            });
-        } else {
-            queryStringParams.push(key + "=" + params[key]);
-        }
-    });
-
-    const queryString = queryStringParams.join("&");
-
-    // const protocol = import.meta.env.VITE_VIEWER_API_PROTOCOL;
-    // const host = import.meta.env.VITE_VIEWER_API_HOST;
-    // const core = import.meta.env.VITE_SOLR_CORE_PATH;
-    // const baseUrl = `${protocol}://${host}${core}&${queryString}`;
-    const baseUrl = `${import.meta.env.VITE_SOLR_URL}&${queryString}`;
-    const response = await fetch(baseUrl);
-
-    if (response.ok) {
-        const data = await response.json();
-        return data;
-    } else {
-        const message = await response.text();
-        const error = new Error(message);
-        error.response = response;
-        throw error;
+  // Shouldn't ever have null or undefined params, but test and remove just
+  // in case, otherwise we end up with param=null or param=undefined.
+  Object.keys(params).forEach((key) => {
+    if (params[key] === null || params[key] === undefined) {
+      delete params[key];
     }
+  });
+  params = Object.assign(params, {
+    // `q` should work for edismax and lucene (standard)
+    // `query` is used for DLTS viewer API for some reason
+    // Avoid `q : undefined` if q was deleted above or never present
+    // q: params.q !== undefined ? encodeURIComponent(params.q) : "",
+    defType: 'edismax',
+    indent: 'on',
+    wt: 'json',
+  });
+
+  const queryStringParams = [];
+  Object.keys(params).forEach((key) => {
+    const paramValue = params[key];
+
+    // Some params like fq can be specified multiple times
+    if (Array.isArray(paramValue)) {
+      paramValue.forEach((value) => {
+        queryStringParams.push(key + '=' + value);
+      });
+    } else {
+      queryStringParams.push(key + '=' + params[key]);
+    }
+  });
+
+  const queryString = queryStringParams.join('&');
+
+  // const protocol = import.meta.env.VITE_VIEWER_API_PROTOCOL;
+  // const host = import.meta.env.VITE_VIEWER_API_HOST;
+  // const core = import.meta.env.VITE_SOLR_CORE_PATH;
+  // const baseUrl = `${protocol}://${host}${core}&${queryString}`;
+  const baseUrl = `${import.meta.env.VITE_SOLR_URL}${queryString}`;
+  const response = await fetch(baseUrl);
+
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  } else {
+    const message = await response.text();
+    const error = new Error(message);
+    error.response = response;
+    throw error;
+  }
 }
 
 /**
@@ -70,38 +70,37 @@ async function doFetch(params) {
  * @returns Promise
  */
 export async function solrSearch(query, queryFields) {
-    // "#" sometimes gets added to the end of the URL, probably because search results have
-    // <a> tags with href="#"
-    // if (
-    //     errorSimulation &&
-    //     errorSimulation.startsWith(ERROR_SIMULATION_SEARCH)
-    // ) {
-    //     throw Error(ERROR_SIMULATION_SEARCH);
-    // }
+  // "#" sometimes gets added to the end of the URL, probably because search results have
+  // <a> tags with href="#"
+  // if (
+  //     errorSimulation &&
+  //     errorSimulation.startsWith(ERROR_SIMULATION_SEARCH)
+  // ) {
+  //     throw Error(ERROR_SIMULATION_SEARCH);
+  // }
 
-    // handles empty query by sending search all
-    const querella = query ? `${query}` : "*:*";
+  // handles empty query by sending search all
+  const querella = query ? `${query}` : '*:*';
 
-    const params = {
-        // viewerAPI is not responding when sending `q`, so using query
-        // query: querella,
-        q: querella,
-        // https://discovery1.dlib.nyu.edu/solr/open-square-metadata/select?q=dad&fl=title,subtitle,description,author,date,identifier,coverHref,thumbHref&hl=true&hl.fl=author,date,description,series_names,subtitle,title&hl.fragsize=500&hl.simple.pre=%3Cmark%3E&hl.simple.post=%3C/mark%3E&hl.snippets=1&qf=author^4%20date^1%20description^2%20series_names^3%20subtitle^4%20title^4&rows=1999&sort=score%20desc,title_sort%20asc&defType=edismax&indent=on&wt=json
-        // TODO: what property to use for `coverHref`?
-        // fl: "title,subtitle,description,author,date,identifier,coverHref,thumbHref",
-        fl: "title,subtitle,description,contributorsAsASentence,dateBook,openSquareId,id", // openSquareId and id are the same thing = ISBN
-        hl: true,
-        "hl.fl": getHlFlFromQueryFields(queryFields),
-        "hl.fragsize": DEFAULT_HIGHLIGHT_FRAGMENT_SIZE,
-        "hl.simple.pre": "<mark>",
-        "hl.simple.post": "</mark>",
-        "hl.snippets": 1,
-        qf: getQfFromQueryFields(queryFields),
-        rows: 1999, // for no pagination
-        // sort: "score%20desc,title_sort%20asc",
-    };
+  const params = {
+    // viewerAPI is not responding when sending `q`, so using query
+    // query: querella,
+    q: querella,
+    // TODO: what property to use for `coverHref`?
+    // fl: "title,subtitle,description,author,date,identifier,coverHref,thumbHref",
+    fl: 'title,subtitle,description,contributorsAsASentence,dateBook,openSquareId,id', // openSquareId and id are the same thing = ISBN
+    hl: true,
+    'hl.fl': getHlFlFromQueryFields(queryFields),
+    'hl.fragsize': DEFAULT_HIGHLIGHT_FRAGMENT_SIZE,
+    'hl.simple.pre': '<mark>',
+    'hl.simple.post': '</mark>',
+    'hl.snippets': 1,
+    qf: getQfFromQueryFields(queryFields),
+    rows: 1999, // for no pagination
+    // sort: "score%20desc,title_sort%20asc",
+  };
 
-    return doFetch(params);
+  return doFetch(params);
 }
 
 /**
@@ -110,17 +109,17 @@ export async function solrSearch(query, queryFields) {
  * @returns string comma-separated
  */
 function getHlFlFromQueryFields(queryFields) {
-    let hlFlFields = [];
+  let hlFlFields = [];
 
-    Object.keys(queryFields).forEach((fieldName) => {
-        const highlight = queryFields[fieldName].highlight || false;
+  Object.keys(queryFields).forEach((fieldName) => {
+    const highlight = queryFields[fieldName].highlight || false;
 
-        if (highlight) {
-            hlFlFields.push(`${fieldName}`);
-        }
-    });
+    if (highlight) {
+      hlFlFields.push(`${fieldName}`);
+    }
+  });
 
-    return hlFlFields.join(",");
+  return hlFlFields.join(',');
 }
 
 /**
@@ -129,14 +128,14 @@ function getHlFlFromQueryFields(queryFields) {
  * @returns string
  */
 function getQfFromQueryFields(queryFields) {
-    let weightedQueryFields = [];
+  let weightedQueryFields = [];
 
-    Object.keys(queryFields).forEach((fieldName) => {
-        const weight = queryFields[fieldName].weight || 1;
+  Object.keys(queryFields).forEach((fieldName) => {
+    const weight = queryFields[fieldName].weight || 1;
 
-        weightedQueryFields.push(`${fieldName}^${weight}`);
-    });
+    weightedQueryFields.push(`${fieldName}^${weight}`);
+  });
 
-    // %20 = space (in urls)
-    return weightedQueryFields.join("%20");
+  // %20 = space (in urls)
+  return weightedQueryFields.join('%20');
 }
