@@ -6,9 +6,11 @@
   "author": "Taka <jna1@nyu.edu>",
   "scripts": {
     "dev": "vite",
-    "build-dev": "NODE_ENV=development vite build --mode development",
+    "build-dev": "vite build --mode develop",
     "build-stage": "vite build --mode stage",
     "build": "vite build",
+    "preview-dev": "vite preview --mode develop",
+    "preview-stage": "vite preview --mode develop",
     "preview": "vite preview",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "test": "vitest",
