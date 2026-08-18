@@ -47,7 +47,6 @@ async function doFetch(params) {
   // const protocol = import.meta.env.VITE_VIEWER_API_PROTOCOL;
   // const host = import.meta.env.VITE_VIEWER_API_HOST;
   // const core = import.meta.env.VITE_SOLR_CORE_PATH;
-  // const baseUrl = `${protocol}://${host}${core}&${queryString}`;
   const baseUrl = `${import.meta.env.VITE_SOLR_URL}${queryString}`;
   const response = await fetch(baseUrl);
 
@@ -83,12 +82,9 @@ export async function solrSearch(query, queryFields) {
   const querella = query ? `${query}` : '*:*';
 
   const params = {
-    // viewerAPI is not responding when sending `q`, so using query
-    // query: querella,
     q: querella,
     // TODO: what property to use for `coverHref`?
-    // fl: "title,subtitle,description,author,date,identifier,coverHref,thumbHref",
-    fl: 'title,subtitle,description,contributorsAsASentence,dateBook,openSquareId,id', // openSquareId and id are the same thing = ISBN
+    fl: 'title,subtitle,description,contributorsAsASentence,dateBook,openSquareId,id,imprint', // openSquareId and id are the same thing = ISBN
     hl: true,
     'hl.fl': getHlFlFromQueryFields(queryFields),
     'hl.fragsize': DEFAULT_HIGHLIGHT_FRAGMENT_SIZE,
