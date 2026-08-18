@@ -7,6 +7,9 @@ export default defineConfig(({ mode }) => {
   return {
     base: '/search/',
     server: {
+build: {
+        sourcemap: mode === 'development' || 'develop',
+      },
       port: 5173,
       host: '127.0.0.1',
       // using proxy in local development to bypass CORS for now
