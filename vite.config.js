@@ -7,12 +7,11 @@ export default defineConfig(({ mode }) => {
   return {
     base: '/search/',
     server: {
-build: {
+      build: {
         sourcemap: mode === 'development' || 'develop',
       },
       port: 5173,
       host: '127.0.0.1',
-      // using proxy in local development to bypass CORS for now
       proxy: {
         '/solr': {
           target: env.VITE_SOLR_TARGET,
@@ -30,6 +29,15 @@ build: {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
+      },
+    },
+    preview: {
+      proxy: {
+        '/solr': {
+          target: env.VITE_SOLR_TARGET,
+          changeOrigin: true,
+          secure: false,
+        },
       },
     },
   };
