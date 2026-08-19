@@ -10,8 +10,9 @@
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/devcontainers/features/node:1": {
-			"version": "20.15.0"
-		}
+			"version": "none" // setting node version from nvmrc
+		},
+        "ghcr.io/devcontainers/features/aws-cli:1": {}
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [
@@ -28,12 +29,18 @@
 			]
 		}
 	},
+    // mounts the aws credential from your root home dir into the container
+    "mounts": [
+        "source=${localEnv:HOME}/.aws,target=/home/node/.aws,type=bind"
+    ],
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "npm clean-install",
+	// "postCreateCommand": "npm clean-install",
+	"postCreateCommand": "bash -i -c 'nvm install && nvm use'", // uses version in .nvmrc
+    // running npm install only if content changes (first load, or change)
+    "updateContentCommand": "npm install",
     "runArgs": [
         // comment this in for local development with solr running within docker compose
-        // "--network=opensquare_network",
-        "--name=vite_dev_container"
+        "--name=open-square-search_dev_container"
     ]
 	// Configure tool-specific properties.
 	// "customizations": {},

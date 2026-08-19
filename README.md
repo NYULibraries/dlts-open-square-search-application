@@ -1,7 +1,7 @@
 # DLTS Open Square: Search
 
 [Metadata search application](http://opensquare.nyupress.org/search/) for the DLTS [Open Square website](http://opensquare.nyupress.org/).
-A Client-side rendered application hosted on AWS S3.
+A Client-side rendered application hosted on AWS S3 sitting behind an AWS CloudFront Distribution.
 
 Built With:
 
@@ -16,66 +16,87 @@ Tested with:
 -   [Selenium](https://www.seleniumhq.org/) (in removal in favor of playright)
 -   [WebdriverIO](https://webdriver.io/)
 
-## Architecture
+## Data Flow Architecture
 
-> https://mermaid.js.org/syntax/flowchart.html
+```
+┌───────────────────────┐
+│         press         │
+│                       │
+│  [ nyupress ]         │
+│        │              │
+│        │ uploads to   │
+│        ▼              │
+│  [ supadu ]           │
+└────────┬──────────────┘
+         │
+         │ provides data to
+         ▼
+  [ DLTS Viewer API w/cache ] ─────────── feeds supadu data into ─────────┐
+    │     │                                                               │
+    │     │                                                               ▼
+    │     │                                                           [ metarepo ]
+    │     │                                                           (Metadata Github Repository)
+    │     │ builds static
+    │     │ pages from
+    │     │
+    │  ┌──┴────────────────────────────────────────────────────────────┐
+    │  │                       front-end                               │
+    │  │  │                                                            │
+    │  │  ▼                                                            │
+    │  │  [ osHugo ] ◄─── links to ───► [ osSearch ]                   │
+    │  │  (dlts-open-square Hugo)       (dlts-open-square-search)      │
+    │  └────────────────────────────────────┬──────────────────────────┘
+    │                                       │
+    │ ingests                               │ queries solr
+    │ data from                             │
+    ▼                                       ▼
+ ┌─────────────────────────────────────────────┐
+ │                  [ solr ]                   │
+ │              (Solr OpenSquare)              │
+ └─────────────────────────────────────────────┘
+```
 
-```mermaid
-flowchart TD
-    %% declare boxes id[text]
-    subgraph press
-    nyupress[nyupress]
-    supadu[supadu]
-    end
-    metarepo[Metadata Github Repository<br/> old source of truth for Hugo site]
-    albAPI[DLTS Viewer API<br/> w/cache]
-    solr[Solr OpenSquare]
-    subgraph front-end
-    osHugo[dlts-open-square <br/> Hugo]
-    osSearch[dlts-open-square-search <br/> Search]
-    end
 
-    %% link boxes id --message--> id
-    nyupress -- uploads to --> supadu
-    %% metarepo --> osHugo
-    supadu-- provides data to -->albAPI
-    albAPI<-- relays query data from search -->solr
-    albAPI--builds static pages from -->osHugo
-    osHugo<-- links to --> osSearch
-    osSearch<--queries solr through -->albAPI
-    albAPI-- feeds supadu data into -->metarepo
+### Deployment Architecture
+
+```
+                     ┌──────────────────┐
+                     │   User Browser   │
+                     └────────┬─────────┘
+                              │
+                    1. HTTP Requests (UI & API)
+                              │
+                              ▼
+                    ┌───────────────────┐
+                    │   CloudFront CDN  │
+                    └─────────┬─────────┘
+                              │
+        ┌─────────────────────┼─────────────────────┐
+        │ 2a. Path: /*        │ 2b. Path: /search*  │ 2c. Path: /solr*
+        │     (Static UI)     │     (React App)     │     (API / Proxy)
+        ▼                     ▼                     ▼
+┌──────────────┐      ┌──────────────┐      ┌──────────────┐
+│  S3 Bucket   │      │  S3 Bucket   │      │Solr Instance │
+│ (Root Site)  │      │ (Search App) │      │ (EC2 / ALB)  │
+└──────────────┘      └──────┬───────┘      └──────────────┘
+                             │
+                             │ 3. React app executes in browser
+                             └─────────────────► Calls /solr/*
 ```
 
 ### Environments
 
-> separated under the gitops practice of Branch tips as the single source of truth for each environment.
+This project uses GitOps principles where specific branch tips act as the single source of truth for each environment:
 
--   Development (local and deployed)
-    -   branch off `develop`
-    -   ticket naming recommendation `<ticketNumber>-<SmallSummary>`
-    -   (uses `.env.development` to override locally create `.env.development.local`)
-    -   create PR back into development
-    -   deploy to development environment
-    -   search hosted at: https://opensquare-dev.nyupress.org/
-    -   DLTS viewer api hosted at: https://stage-sites.dlib.nyu.edu/viewer/api/v1/search/
-    -   solr hosted at: https://devdiscovery.dlib.nyu.edu/solr/#/
--   Staging (deployed)
-    -   branch `staging` (uses `.env.stage`)
-    -   create PRs from `development` branch as promotion of changes to Staging
-    -   deploy to staging environment
-    -   search hosted at: https://opensquare-stage.nyupress.org/
-    -   DLTS viewer api hosted at:
-    -   solr hosted at: https://stagediscovery.dlib.nyu.edu/solr/#/
--   Production (deployed)
-    -   branch `main` (uses `.env.production)
-    -   create PRs from `staging` branch as promotion of changes to Production
-    -   deploy to production environment
-    -   deploys to discovery1
-    -   search hosted at: https://opensquare.nyupress.org/
-    -   DLTS viewer api hosted at:
-    -   solr hosted at: https://discovery.dlib.nyu.edu/solr/#/
+| Environment     | Branch                         | Environment File   | Hosted App                                                              |
+| :-------------- | :----------------------------- | :----------------- | :---------------------------------------------------------------------- |
+| **Development** | Feature branches off `develop` | `.env.development` | [opensquare-dev.nyupress.org](https://opensquare-dev.nyupress.org/)     |
+| **Staging**     | `staging`                      | `.env.stage`       | [opensquare-stage.nyupress.org](https://opensquare-stage.nyupress.org/) |
+| **Production**  | `main`                         | `.env.production`  | [opensquare.nyupress.org](https://opensquare.nyupress.org/)             |
 
-## Project setup
+For details on branching, PR promotion workflows, and ticket naming conventions, see [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+## Setup
 
 ### Prerequisites
 
@@ -91,8 +112,6 @@ flowchart TD
 
 -   Verify environment variable values with someone from the team
 
-### Setup
-
 > open project in vs-code, and then open in container.
 > note all dev tools are installed within vscode, no need for configurations.
 
@@ -104,6 +123,8 @@ npm clean-install
 ```
 
 > using the terminal within the dev container
+
+## Contributing
 
 ### Compile and hot-reload for local development
 
@@ -118,12 +139,7 @@ npm run dev
 > [vite modes and node_env](https://vite.dev/guide/env-and-mode.html#node-env-and-modes)
 
 ```
-# for production
-npm run build
-```
-
-```
-# Uses environment variables from .env.dev
+# Uses environment variables from .env.develop NOT from .env.development
 npm run build-dev
 
 # Uses environment variables from .env.stage
@@ -143,11 +159,10 @@ npm run preview
 
 ## Backup and preserve a deployed site
 
-Pre-requisites
+> aws-cli is already included in the devcontainer
+> local aws key is mounted to devcontainer
 
-- aws cli
-
-When deploying new changes to an environment you might need to backup the content in that S3 bucket.
+To backup the content already deployed in the S3 bucket:
 
 ```
 npm run backup-prod
@@ -156,12 +171,12 @@ npm run backup-prod
 
 ## Deployment
 
-Pre-requisites (not in devcontainer, needed on your development machine)
+Pre-requisites:
 
--   [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
--   aws cli credentials provisioned by the devops team with the following abilities:
-    -   s3 bucket (write)
-    -   cloudfront (invalidation)
+-   aws cli credentials located in `${localEnv:HOME}/.aws`
+    -   keys will be mounted into devcontainer
+    -   s3 bucket (read/write permissions)
+    -   cloudfront (cache invalidation permissions)
 
 Deploying this application requires the following actions
 
@@ -172,23 +187,25 @@ Deploying this application requires the following actions
 ```
 # development environment
 npm run build-dev
+npm run preview
 npm run deploy-dev
 npm run cache-inv-dev
 
 # staging environment
 npm run build-stage
+npm run preview
 npm run deploy-stage
 npm run cache-inv-stage
 
 # production environment
 npm run build
+npm run preview
 npm run deploy
 npm run cache-inv
 ```
 
 Future upgrades to this process:
 
--   aws cli installed within devcontainer (passing aws credential into container)
 -   github actions build and push in devcontainers (no need to provision aws credentials, no sitting credentials on dev machines)
     -   pros:
         -   no need to store AWS keys locally
@@ -198,15 +215,24 @@ Future upgrades to this process:
         -   TODO: look into alloted hours with enterprise accounts for Github Actions
     -   steps:
         -   store variables in secrets store
-        -   use devcontainer setup for build environment
+        -   [x] use devcontainer setup for build environment
         -   create artifact
-        -   aws copy and deploy
+        -   [x] aws copy and deploy
 -   git tagging practices, and gitops deployments triggered by branch merges
+-   [x] aws cli installed within devcontainer (passing aws credential into container)
+- [ ] SPA fallback for react router 404
+  - Cloudfront distribution > Error Pages
+    - add custom response:
+      - HTTP code 403
+        - customize error response:yes
+        - resonse page path: `index.html`
+        - http reponse code: 200 OK
+      - HTTP code 404
+        - customize error response:yes
+        - resonse page path: `index.html`
+        - http reponse code: 200 OK
 
-## Infrastructure Configuration post Deployment
-
--   re-route of 404 page to index.html (static site with client side rendered react needs this redirect to hanlde 404 locally)
--   configure cloudfront distribution pages for error handling too
+## Testing
 
 ### Run all tests
 
@@ -374,40 +400,3 @@ server instead of the production Solr server.
 
 -   `?solrErrorSimulation=search`
     -   Simulates Solr request error for initial topic/full-text search
-
-## TODO: add publishing process as a mermaidjs flow
-
-```mermaid
----
-title: Publication Workflows for OpenSquare (Hugo, API, Solr, and SearchApp)
----
-graph LR
-
-    %% declare the boxes
-    pre[Before: send EPUBs to Alberto]
-    1["May 14: Check for Library EPUB and PDF"]
-    2["May 19: Metadata to Biblio (1 week)"]
-    3["May 26: Metadata to Supadu (2 days)"]
-    4["May 28: Remediate/Ingest (1 week)"]
-    5["June 4: Send EPUBs to Press for upload to CoreSource (1 week)"]
-    6["June 23: Publish"]
-    7["Two new front list books are scheduled to be published on 6/23"]
-
-    %% link the boxes
-    pre-->1
-    1-->2
-    2-->3
-    3-->4
-    4-->5
-    5-->6
-    6-->7
-```
-
-```mermaid
-sequenceDiagram
-    participant B as NYUPress
-    participant A as Alberto
-    participant JG as JonathanGreenberg
-    B->>A: hola
-    JG->>A: hola
-```
