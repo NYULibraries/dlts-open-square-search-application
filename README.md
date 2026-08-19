@@ -86,32 +86,15 @@ Tested with:
 
 ### Environments
 
-> separated under the gitops practice of Branch tips as the single source of truth for each environment.
+This project uses GitOps principles where specific branch tips act as the single source of truth for each environment:
 
--   Development (local and deployed)
-    -   branch off `develop`
-    -   ticket naming recommendation `<ticketNumber>-<SmallSummary>`
-    -   (uses `.env.development` to override locally create `.env.development.local`)
-    -   create PR back into development
-    -   deploy to development environment
-    -   search hosted at: https://opensquare-dev.nyupress.org/
-    -   DLTS viewer api hosted at: https://stage-sites.dlib.nyu.edu/viewer/api/v1/search/
-    -   solr hosted at: https://devdiscovery.dlib.nyu.edu/solr/#/
--   Staging (deployed)
-    -   branch `staging` (uses `.env.stage`)
-    -   create PRs from `development` branch as promotion of changes to Staging
-    -   deploy to staging environment
-    -   search hosted at: https://opensquare-stage.nyupress.org/
-    -   DLTS viewer api hosted at:
-    -   solr hosted at: https://stagediscovery.dlib.nyu.edu/solr/#/
--   Production (deployed)
-    -   branch `main` (uses `.env.production)
-    -   create PRs from `staging` branch as promotion of changes to Production
-    -   deploy to production environment
-    -   deploys to discovery1
-    -   search hosted at: https://opensquare.nyupress.org/
-    -   DLTS viewer api hosted at:
-    -   solr hosted at: https://discovery.dlib.nyu.edu/solr/#/
+| Environment     | Branch                         | Environment File   | Hosted App                                                              |
+| :-------------- | :----------------------------- | :----------------- | :---------------------------------------------------------------------- |
+| **Development** | Feature branches off `develop` | `.env.development` | [opensquare-dev.nyupress.org](https://opensquare-dev.nyupress.org/)     |
+| **Staging**     | `staging`                      | `.env.stage`       | [opensquare-stage.nyupress.org](https://opensquare-stage.nyupress.org/) |
+| **Production**  | `main`                         | `.env.production`  | [opensquare.nyupress.org](https://opensquare.nyupress.org/)             |
+
+For details on branching, PR promotion workflows, and ticket naming conventions, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Setup
 
