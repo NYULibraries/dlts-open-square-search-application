@@ -52,7 +52,7 @@ export function ResultItem({
           </div>
           <div className="imprint">
             <span>Imprint: </span>
-            <span>{imprint}</span>
+            <span>{imprint[0]}</span>
           </div>
           <div className="pubdate">
             <span>Published: </span>
@@ -72,7 +72,8 @@ ResultItem.propTypes = {
   contributors: PropTypes.string,
   date: PropTypes.string,
   identifier: PropTypes.string,
-  imprint: PropTypes.string,
+  //   imprint: PropTypes.string,
+  imprint: PropTypes.array,
   description: PropTypes.string,
   maxDescriptionLength: PropTypes.number,
   subtitle: PropTypes.string,
