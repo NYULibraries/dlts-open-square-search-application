@@ -11,6 +11,67 @@ $submit-button-hover-path: #ffffff;
   margin-bottom: 2rem;
 }
 
+$layout-breakpoint: 840px !default;
+
+// .osq-search-layout {
+//   display: grid;
+//   // grid-template-columns: minmax(0, 50rem) minmax(16rem, 22rem);
+//   grid-template-columns: minmax(0, 50rem) minmax(16rem, 1fr);
+//   gap: 2rem;
+//   align-items: start;
+
+//   @media (max-width: #{$layout-breakpoint - 1px}) {
+//     grid-template-columns: minmax(0, 1fr); // stack on tablet/phone
+//   }
+// }
+
+.osq-search-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 50rem) minmax(16rem, 1fr);
+  grid-template-rows: auto 1fr;
+  column-gap: 2rem;
+  row-gap: 0; // results sit right under the search bar
+  align-items: start;
+
+  .osq-searchform {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .beta-callout {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .osq-search-results {
+    grid-column: 1;
+    grid-row: 2;
+    min-width: 0;
+  }
+
+  @media (max-width: #{$layout-breakpoint - 1px}) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    row-gap: 1.5rem;
+
+    .osq-searchform,
+    .beta-callout,
+    .osq-search-results {
+      grid-column: 1;
+      grid-row: auto;
+    }
+  }
+}
+
+.beta-callout {
+  background-color: #f1e5f961;
+    border: 6px ridge #c693f0;
+    padding: 16px;
+    margin: 0;
+    font-size: 0.9rem; // optional; drop if the designer didn't specify
+    line-height: 1.4; // optional
+}
+
 .osq-search {
   display: flex;
   max-width: 50rem;
@@ -35,6 +96,7 @@ $submit-button-hover-path: #ffffff;
 
   #osq-searchinput {
     flex: 1 1 auto;
+    min-width: 0; // lets the input shrink instead of overflowing
     padding: 2px 1rem;
   }
 
