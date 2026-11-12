@@ -1,30 +1,116 @@
-$bordergray: #dddddd;
-$hoverColorTopics: #004646;
-$topicFont: 'Crimson Text',
-Georgia,
-serif;
+// styles related to the structure surrounding the search application:
+// - headers
+// - layout
+// - footers
 
-@mixin topic-treatment() {
-  font-family: $topicFont;
-  font-size: 1rem;
+// goals:
+// - defined breakpoints and mixins
+// - component based architecture: media queries go within the component
+// $breakpoints: (
+//   'sm': 600px
+//   'md': 840px,
+//   'lg': 1024,
+// );
+// $bordergray: #dddddd;
+// $hoverColorTopics: #004646;
+// $topicFont: 'Crimson Text',
+// Georgia,
+// serif;
 
-  &:link,
-  &:visited {
-    color: teal !important;
-  }
+// @mixin topic-treatment() {
+//   font-family: $topicFont;
+//   font-size: 1rem;
 
-  &[href]:hover {
-    color: $hoverColorTopics !important;
-    text-decoration: none;
-    .osq-hitcount {
-      color: #000;
-    }
-    .osq-alt-names {
-      color: #222;
-    }
-  }
-  .osq-hitcount {
-    color: #444;
-    font-size: .9rem;
-  }
-}
+//   &:link,
+//   &:visited {
+//     color: teal !important;
+//   }
+
+//   &[href]:hover {
+//     color: $hoverColorTopics !important;
+//     text-decoration: none;
+//     .osq-hitcount {
+//       color: #000;
+//     }
+//     .osq-alt-names {
+//       color: #222;
+//     }
+//   }
+//   .osq-hitcount {
+//     color: #444;
+//     font-size: .9rem;
+//   }
+// }
+
+// .osq-logo {
+//     a {
+//         display: block;
+//     }
+
+//     img {
+//         width: 100%;
+//         height: auto;
+//     }
+// }
+
+// // styles for the new opensquare logo
+// .top-hold {
+//     // background-color: red;
+//     font-family: "nyuperstare", Verdana, sans-serif;
+//     justify-content: flex-end;
+// }
+// .top-hold h1 a {
+//     margin-bottom: .4rem;
+//     text-transform: uppercase;
+//     color: #8400de;
+//     text-decoration: none;
+//     font-weight: 600;
+//     display: inline-block;
+//     line-height: 1;
+//     font-size: 2.3rem;
+// }
+
+// .top-hold h1 a span {
+//     font-weight: 300;
+// }
+
+// .top-hold h2 {
+//     font-size: 1.1rem;
+//     color: #57068c;
+//     font-weight: 400;
+// }
+// // DONE: osq-logo
+// @media (max-width: 599px) {
+//     .nyup-logo {
+//         order: -1;
+//     }
+
+//     .nyup-logo img {
+//         max-width: 100px;
+//         width: 80%;
+//     }
+
+//     .osq-logo img {
+//         max-width: 130px;
+//     }
+
+//     .top-hold h1 {
+//         font-size: calc(.8rem + 4vw);
+//     }
+
+//     .top-hold h2 {
+//         font-size: calc(.5rem + 2vw);
+//     }
+// }
+
+//   TODO: nyup-logo
+
+// .nyup-logo {
+//   @media (min-width: $bp-sm) and (max-width: $bp-md) {
+//       .sidebar {
+//         display: block;
+//       }
+//     }
+
+// }
+// TODO: .top-hold
