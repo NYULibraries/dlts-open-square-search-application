@@ -113,7 +113,7 @@ export function SearchForm() {
             <aside className="beta-callout ">
               <b>NYU faculty, staff, and students:</b>
               <br />
-              Discover Books by Meaning. Explore Beyond Keywords. <br />
+              Discover books by meaning. Explore beyond keywords. <br />
               Try the{' '}
               <a
                 target="_blank"
